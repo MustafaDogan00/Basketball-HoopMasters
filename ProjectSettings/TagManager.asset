@@ -7,6 +7,9 @@ TagManager:
   - Joystick
   - Basketball
   - RightHand
+  - StadiumSeats
+  - Basket1
+  - Basket2
   layers:
   - Default
   - TransparentFX

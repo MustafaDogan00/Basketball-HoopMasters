@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _movementSpeed;
     [SerializeField] private float _rotationSpeed = 0.4f;
-    private float _ballSpeed=100f;
+    private float _ballSpeed=15f;
+    private float _shootPower=500f;
 
     private Rigidbody _playerRigidbody;
 
@@ -27,13 +28,14 @@ public class PlayerController : MonoBehaviour
     private bool _hasBall;
    
 
-    private void Awake()
+    private void Start()
     {
         Instance = this;
         _joyStick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<DynamicJoystick>();
         _playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _ball = GameObject.FindGameObjectWithTag("Basketball");
+        _ball.GetComponent<Rigidbody>().useGravity = false;
         _rightHand = GameObject.FindGameObjectWithTag("RightHand");
         _basket1 = GameObject.FindGameObjectWithTag("Basket1");
         _basket2 = GameObject.FindGameObjectWithTag("Basket2");
@@ -44,8 +46,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_hasBall)
-        {
             if (_joyStick.move)
             {
                 _playerAnimator.SetBool("Move", true);
@@ -62,10 +62,11 @@ public class PlayerController : MonoBehaviour
             {
                 _playerAnimator.SetBool("Move", false);
             }
-        }
+        
        
         BallDistance();
         Raycasting();
+        ShootingBall();
     }
 
     void BallDistance()
@@ -74,23 +75,7 @@ public class PlayerController : MonoBehaviour
         if (distance <=1)
         {
             _ball.transform.position=_rightHand.transform.position;
-
         }
-
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Basketball")
-        {
-            _hasBall = true;
-        }
-        else
-        {
-            _hasBall = false;
-        }
-
     }
 
     void Raycasting()
@@ -99,6 +84,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hit, 5f))
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
+
             if (hit.collider.tag == "Basket1"  )
             {
                 _ball.transform.position=Vector3.Lerp(_ball.transform.position,_basket1.transform.position, _ballSpeed*Time.deltaTime);
@@ -108,6 +94,12 @@ public class PlayerController : MonoBehaviour
                 _ball.transform.position = Vector3.Lerp(_ball.transform.position, _basket2.transform.position, _ballSpeed * Time.deltaTime);
             }
         }
-
     }
+    void ShootingBall()
+    {
+        if (Input.GetMouseButtonDown(1))
+            _ball.GetComponent<Rigidbody>().AddForce((Vector3.up + Vector3.forward) * _shootPower);
+            _ball.GetComponent<Rigidbody>().useGravity = true;   
+    }
+
 }
