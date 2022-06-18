@@ -13,9 +13,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _movementSpeed;
     [SerializeField] private float _rotationSpeed = 0.4f;
     private float _ballSpeed=15f;
-    private float _shootPower=500f;
+    public float shootPower;
 
     private Rigidbody _playerRigidbody;
+    private Rigidbody _ballRb;
 
     private DynamicJoystick _joyStick;
 
@@ -35,7 +36,9 @@ public class PlayerController : MonoBehaviour
         _playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _ball = GameObject.FindGameObjectWithTag("Basketball");
-        _ball.GetComponent<Rigidbody>().useGravity = false;
+        _ballRb = _ball.GetComponent<Rigidbody>();
+        _ballRb.useGravity = false;
+        _ballRb.isKinematic = true;
         _rightHand = GameObject.FindGameObjectWithTag("RightHand");
         _basket1 = GameObject.FindGameObjectWithTag("Basket1");
         _basket2 = GameObject.FindGameObjectWithTag("Basket2");
@@ -66,7 +69,6 @@ public class PlayerController : MonoBehaviour
        
         BallDistance();
         Raycasting();
-        ShootingBall();
     }
 
     void BallDistance()
@@ -81,25 +83,27 @@ public class PlayerController : MonoBehaviour
     void Raycasting()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 5f))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 10f))
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
 
-            if (hit.collider.tag == "Basket1"  )
+            if (hit.collider.tag == "Basket1" && !_joyStick.move)
             {
-                _ball.transform.position=Vector3.Lerp(_ball.transform.position,_basket1.transform.position, _ballSpeed*Time.deltaTime);
+                //_ball.transform.position=Vector3.Lerp(_ball.transform.position,_basket1.transform.position, _ballSpeed*Time.deltaTime);
+                ShootingBall();
             }
-            if (hit.collider.tag == "Basket2")
+            if (hit.collider.tag == "Basket2" && !_joyStick.move)
             {
-                _ball.transform.position = Vector3.Lerp(_ball.transform.position, _basket2.transform.position, _ballSpeed * Time.deltaTime);
+                //_ball.transform.position = Vector3.Lerp(_ball.transform.position, _basket2.transform.position, _ballSpeed * Time.deltaTime);
+                ShootingBall();
             }
         }
     }
     void ShootingBall()
     {
-        if (Input.GetMouseButtonDown(1))
-            _ball.GetComponent<Rigidbody>().AddForce((Vector3.up + Vector3.forward) * _shootPower);
-            _ball.GetComponent<Rigidbody>().useGravity = true;   
+        _ball.GetComponent<Rigidbody>().AddForce((Vector3.up + Vector3.forward) * shootPower);
+        _ballRb.useGravity = true;
+        _ballRb.isKinematic = false;
     }
 
 }
