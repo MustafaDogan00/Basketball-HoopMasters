@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
         _ball.GetComponent<Rigidbody>().AddForce((Vector3.up + Vector3.forward) * shootPower);
         _ballRb.useGravity = true;
         _ballRb.isKinematic = false;
+      
     }
 
 }
