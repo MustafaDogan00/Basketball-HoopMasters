@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _movementSpeed;
     [SerializeField] private float _rotationSpeed = 0.4f;
-    private float _ballSpeed=15f;
+    private float _ballSpeed = 15f;
     public float shootPower;
 
     private Rigidbody _playerRigidbody;
@@ -23,10 +23,10 @@ public class PlayerController : MonoBehaviour
     private Quaternion _lastRotation;
 
     private GameObject _ball;
-    private GameObject _rightHand;
-    private GameObject _basket1,_basket2;
 
-    private bool _hasBall;
+    [SerializeField] private Transform _handTransform;
+
+
    
 
     private void Start()
@@ -38,11 +38,7 @@ public class PlayerController : MonoBehaviour
         _ball = GameObject.FindGameObjectWithTag("Basketball");
         _ballRb = _ball.GetComponent<Rigidbody>();
         _ballRb.useGravity = false;
-        _ballRb.isKinematic = true;
-        _rightHand = GameObject.FindGameObjectWithTag("RightHand");
-        _basket1 = GameObject.FindGameObjectWithTag("Basket1");
-        _basket2 = GameObject.FindGameObjectWithTag("Basket2");
-
+        _ballRb.isKinematic = true;       
     }
 
 
@@ -76,7 +72,7 @@ public class PlayerController : MonoBehaviour
         float distance =Vector3.Distance(gameObject.transform.position, _ball.transform.position);
         if (distance <=1)
         {
-            _ball.transform.position=_rightHand.transform.position;
+            _ball.transform.position= _handTransform.position;
         }
     }
 
