@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public Animator _playerAnimator;
 
-    [SerializeField] private float _movementSpeed;
+    [SerializeField] private float _movementSpeed=4;
     [SerializeField] private float _rotationSpeed = 0.4f;
     private float _ballSpeed = 15f;
     public float shootPower;
@@ -20,13 +20,11 @@ public class PlayerController : MonoBehaviour
 
     private DynamicJoystick _joyStick;
 
-    private Quaternion _lastRotation;
-
     private GameObject _ball;
 
-    [SerializeField] private Transform _handTransform;
+    [SerializeField] private Transform _basketPos;
 
-
+    private bool _isBallOnHand;
    
 
     private void Start()
@@ -64,43 +62,58 @@ public class PlayerController : MonoBehaviour
         
        
         BallDistance();
+
         Raycasting();
     }
 
     void BallDistance()
     {
         float distance =Vector3.Distance(gameObject.transform.position, _ball.transform.position);
-        if (distance <=1)
+        if (distance <=.5f)
         {
-            _ball.transform.position= _handTransform.position;
+            _ball.transform.position= transform.position+new Vector3(0,1,.5f);
+            _ball.gameObject.transform.SetParent(transform);
+            _isBallOnHand = true;
         }
     }
 
-    void Raycasting()
+   void Raycasting()
     {
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, 10f))
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
 
-            if (hit.collider.tag == "Basket1" && !_joyStick.move)
+            if (hit.collider.tag == "Player" && !_joyStick.move)
             {
-                //_ball.transform.position=Vector3.Lerp(_ball.transform.position,_basket1.transform.position, _ballSpeed*Time.deltaTime);
-                ShootingBall();
+                PassingBall(hit.transform.position, hit.transform.gameObject);
             }
-            if (hit.collider.tag == "Basket2" && !_joyStick.move)
-            {
-                //_ball.transform.position = Vector3.Lerp(_ball.transform.position, _basket2.transform.position, _ballSpeed * Time.deltaTime);
-                ShootingBall();
-            }
+          
         }
     }
     void ShootingBall()
     {
-        _ball.GetComponent<Rigidbody>().AddForce((Vector3.up + Vector3.forward) * shootPower);
-        _ballRb.useGravity = true;
-        _ballRb.isKinematic = false;
-      
+        if (_isBallOnHand && !_joyStick.move)
+        {
+            _ball.transform.DOJump(_basketPos.position, 1, 1, 1);
+            _ballRb.useGravity = true;
+            _ballRb.isKinematic = false;
+            _ball.gameObject.transform.SetParent(null);
+            _isBallOnHand=false;
+        }
+    }
+    void PassingBall(Vector3 passVector,GameObject AI)
+    {
+        if (_isBallOnHand && !_joyStick.move)
+        {
+            _ball.transform.DOMove(passVector, 1);
+            _ballRb.useGravity = true;
+            _ballRb.isKinematic = false;
+            _ball.gameObject.transform.SetParent(null);
+            _isBallOnHand = false;
+            Destroy(gameObject.GetComponent<PlayerController>());
+            AI.AddComponent<PlayerController>();
+        }
     }
 
 }
