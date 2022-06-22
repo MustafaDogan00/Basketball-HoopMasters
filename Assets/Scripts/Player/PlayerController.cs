@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     private DynamicJoystick _joyStick;
 
     private GameObject _ball;
-    private GameObject _chest;
+    private Transform _chest;
 
     [SerializeField] private Transform _basketPos;
 
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
         _playerAnimator = transform.GetChild(0).GetComponent<Animator>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _ball = GameObject.FindGameObjectWithTag("Basketball");
-        _chest = GameObject.FindGameObjectWithTag("Chest");
+        _chest = gameObject.transform.GetChild(1).transform;
         _ballRb = _ball.GetComponent<Rigidbody>();
         _ballRb.useGravity = false;
         _ballRb.isKinematic = true;       
@@ -65,8 +65,28 @@ public class PlayerController : MonoBehaviour
         
        
         BallDistance();
-
         Raycasting();
+        if (_isBallOnHand)
+        {
+            switch (gameObject.name)
+            {
+                case "PlayerHolder":
+                    whichPlayer = 0;
+                    break;
+                case "AI1":
+                    whichPlayer = 1;
+                    break;
+                case "AI2":
+                    whichPlayer = 2;
+                    break;
+                case "AI3":
+                    whichPlayer = 3;
+                    break;
+                case "AI4":
+                    whichPlayer = 4;
+                    break;
+            }
+        }
     }
 
     void BallDistance()
@@ -74,7 +94,7 @@ public class PlayerController : MonoBehaviour
         float distance =Vector3.Distance(gameObject.transform.position, _ball.transform.position);
         if (distance <=.5f)
         {
-            _ball.transform.position= transform.position+new Vector3(0,1,.5f);
+            _ball.transform.position = _chest.transform.position + Vector3.forward;
             _ball.gameObject.transform.SetParent(transform);
             _isBallOnHand = true;
         }
@@ -82,40 +102,48 @@ public class PlayerController : MonoBehaviour
 
    void Raycasting()
     {
+        Quaternion spreadAnglePos = Quaternion.AngleAxis(30.0f, new Vector3(0, 1, 0));
+        Quaternion spreadAngleNeg = Quaternion.AngleAxis(-30.0f, new Vector3(0, 1, 0));
+
+
         RaycastHit hit;
-        if (Physics.Raycast(_chest.transform.position,gameObject.transform.forward, out hit, 20f))
+        RaycastHit hit1;
+        RaycastHit hit2;
+        if (Physics.Raycast(_chest.transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
         {
-            Debug.DrawLine(transform.position, hit.point, Color.red);
+            Debug.DrawLine(_chest.transform.position, transform.TransformDirection(Vector3.forward), Color.red);
+
+            if (hit.collider.tag == "Player" && !_joyStick.move)
+            {
+                PassingBall(hit.transform.position, hit.transform.gameObject);              
+            }
+        }
+
+        if (Physics.Raycast(_chest.transform.position, transform.TransformDirection(spreadAnglePos* Vector3.forward), out hit1, Mathf.Infinity))
+        {
+              Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAnglePos * Vector3.forward) * 6, Color.blue);
+       
+            if (hit.collider.tag == "Player" && !_joyStick.move)
+            {
+                PassingBall(hit.transform.position, hit.transform.gameObject);
+            }
+        }
+
+        if (Physics.Raycast(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward), out hit2, Mathf.Infinity))
+        {
+            Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward) * 6, Color.blue);
 
             if (hit.collider.tag == "Player" && !_joyStick.move)
             {
                 PassingBall(hit.transform.position, hit.transform.gameObject);
-                switch(hit.transform.gameObject.name)
-                {
-                    case "PlayerHolder":
-                        whichPlayer = 0;
-                        print(0);
-                   break;
-                    case "AI1":
-                        whichPlayer = 1;
-                        print(1);
-                        break;
-                    case "AI2":
-                        whichPlayer = 2;
-                        print(2);
-                        break;
-                    case "AI3":
-                        whichPlayer = 3;
-                        print(3);
-                        break;
-                    case "AI4":
-                        whichPlayer = 4;
-                        print(4);
-                        break;
-                }
             }
-          
         }
+
+
+
+
+
+
     }
     void ShootingBall()
     {
@@ -130,11 +158,11 @@ public class PlayerController : MonoBehaviour
     }
     void PassingBall(Vector3 passVector,GameObject AI)
     {
-        if (_isBallOnHand && !_joyStick.move)
+        if (_isBallOnHand )
         {
-            _ball.transform.DOMove(passVector, 1);
-            _ballRb.useGravity = true;
-            _ballRb.isKinematic = false;
+            _ball.transform.DOJump(passVector,1,1,1);
+            //_ballRb.useGravity = true;
+            //_ballRb.isKinematic = false;
             _ball.gameObject.transform.SetParent(null);
             _isBallOnHand = false;
             Destroy(gameObject.GetComponent<PlayerController>());

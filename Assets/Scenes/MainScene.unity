@@ -27824,10 +27824,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.17605186
+  m_Radius: 0.21490192
   m_Height: 1.855591
   m_Direction: 1
-  m_Center: {x: -0.013971448, y: 0.8621987, z: 0.004384756}
+  m_Center: {x: 0.005662918, y: 0.8621987, z: 0.004384756}
 --- !u!137 &2829208856028429499
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -31108,7 +31108,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 1.9
   m_AngularDrag: 2.3
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
