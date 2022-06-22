@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _movementSpeed=4;
     [SerializeField] private float _rotationSpeed = 0.4f;
-    public float shootPower;
 
     public int whichPlayer=0;
 
@@ -22,11 +21,11 @@ public class PlayerController : MonoBehaviour
     private DynamicJoystick _joyStick;
 
     private GameObject _ball;
-    private Transform _chest;
 
+    private Transform _chest;
     [SerializeField] private Transform _basketPos;
 
-    public bool _isBallOnHand;
+    public bool isBallOnHand;
    
 
     private void Start()
@@ -66,7 +65,7 @@ public class PlayerController : MonoBehaviour
        
         BallDistance();
         Raycasting();
-        if (_isBallOnHand)
+        if (isBallOnHand)
         {
             switch (gameObject.name)
             {
@@ -87,6 +86,8 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+       
+
     }
 
     void BallDistance()
@@ -94,80 +95,72 @@ public class PlayerController : MonoBehaviour
         float distance =Vector3.Distance(gameObject.transform.position, _ball.transform.position);
         if (distance <=.5f)
         {
-            _ball.transform.position = _chest.transform.position + Vector3.forward;
+            _ball.transform.position = _chest.transform.position + transform.forward;
             _ball.gameObject.transform.SetParent(transform);
-            _isBallOnHand = true;
+            isBallOnHand = true;
         }
     }
 
    void Raycasting()
     {
-        Quaternion spreadAnglePos = Quaternion.AngleAxis(30.0f, new Vector3(0, 1, 0));
-        Quaternion spreadAngleNeg = Quaternion.AngleAxis(-30.0f, new Vector3(0, 1, 0));
+        Quaternion spreadAnglePos = Quaternion.AngleAxis(20.0f, new Vector3(0, 1, 0));
+        Quaternion spreadAngleNeg = Quaternion.AngleAxis(-20.0f, new Vector3(0, 1, 0));
 
 
         RaycastHit hit;
         RaycastHit hit1;
         RaycastHit hit2;
-        if (Physics.Raycast(_chest.transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+        Debug.DrawLine(_chest.transform.position-new Vector3(0,.3f,0),transform.forward*5000,Color.red);
+        Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAnglePos * Vector3.forward) * 6, Color.blue);
+        Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward) * 6, Color.blue);
+        if (Physics.Raycast(_chest.transform.position-new Vector3(0,.5f,0),transform.forward, out hit, Mathf.Infinity))
         {
-            Debug.DrawLine(_chest.transform.position, transform.TransformDirection(Vector3.forward), Color.red);
-
-            if (hit.collider.tag == "Player" && !_joyStick.move)
-            {
-                PassingBall(hit.transform.position, hit.transform.gameObject);              
+           
+            if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
+            {              
+                PassingBall(hit.transform.position, hit.transform.gameObject);                             
+                  
             }
         }
 
-        if (Physics.Raycast(_chest.transform.position, transform.TransformDirection(spreadAnglePos* Vector3.forward), out hit1, Mathf.Infinity))
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAnglePos * Vector3.forward), out hit1, Mathf.Infinity))
         {
-              Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAnglePos * Vector3.forward) * 6, Color.blue);
-       
-            if (hit.collider.tag == "Player" && !_joyStick.move)
-            {
-                PassingBall(hit.transform.position, hit.transform.gameObject);
-            }
-        }
-
-        if (Physics.Raycast(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward), out hit2, Mathf.Infinity))
-        {
-            Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward) * 6, Color.blue);
-
             if (hit.collider.tag == "Player" && !_joyStick.move)
             {
                 PassingBall(hit.transform.position, hit.transform.gameObject);
             }
         }
 
-
-
-
-
-
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAngleNeg * Vector3.forward), out hit2, Mathf.Infinity))
+        {
+            if (hit.collider.tag == "Player" && !_joyStick.move)
+            {
+                PassingBall(hit.transform.position, hit.transform.gameObject);
+            }
+        }
     }
     void ShootingBall()
     {
-        if (_isBallOnHand && !_joyStick.move)
+        if (isBallOnHand && !_joyStick.move)
         {
             _ball.transform.DOJump(_basketPos.position, 1, 1, 1);
             _ballRb.useGravity = true;
             _ballRb.isKinematic = false;
             _ball.gameObject.transform.SetParent(null);
-            _isBallOnHand=false;
+            isBallOnHand=false;
         }
     }
     void PassingBall(Vector3 passVector,GameObject AI)
     {
-        if (_isBallOnHand )
+        if (isBallOnHand )
         {
-            _ball.transform.DOJump(passVector,1,1,1);
-            //_ballRb.useGravity = true;
-            //_ballRb.isKinematic = false;
+            _ball.transform.DOJump(passVector,1,1,.5f);
+            _ballRb.useGravity = true;
+            _ballRb.isKinematic = false;
             _ball.gameObject.transform.SetParent(null);
-            _isBallOnHand = false;
+            isBallOnHand = false;
             Destroy(gameObject.GetComponent<PlayerController>());
             AI.AddComponent<PlayerController>();
-            print("passingBall");
         }
     }
 
