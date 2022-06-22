@@ -10,6 +10,7 @@ TagManager:
   - StadiumSeats
   - Basket1
   - Basket2
+  - Chest
   layers:
   - Default
   - TransparentFX
