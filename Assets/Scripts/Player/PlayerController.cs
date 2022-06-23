@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
    
     public bool isBallOnHand;
     public bool forwOrBack;
+    public bool stopAI;
    
 
     private void Start()
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
             {
                 _playerAnimator.SetBool("Move", false);
             }
-        
+
        
         BallDistance();
         Raycasting();
@@ -88,65 +89,43 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-       
+
     }
 
     void BallDistance()
     {
-        float distance =Vector3.Distance(gameObject.transform.position, _ball.transform.position);
-        if (distance <=1.6f)
+        float distance = Vector3.Distance(gameObject.transform.position, _ball.transform.position);
+        if (distance <= 1.5f)
         {
-            _ball.transform.position = _chest.transform.position + transform.forward;
+            _ball.transform.position = _chest.transform.position;
             _ball.gameObject.transform.SetParent(transform);
             isBallOnHand = true;
+            _ballRb.useGravity = false;
             gameObject.tag = "MainPlayer";
-        }
-        //else
-        //{          
-        //    isBallOnHand=false;
-        //}
+            _ball.GetComponent<SphereCollider>().enabled = false;
+        }    
     }
 
-   void Raycasting()
-    {
-        //Quaternion spreadAnglePos = Quaternion.AngleAxis(20.0f, new Vector3(0, 1, 0));
-        //Quaternion spreadAngleNeg = Quaternion.AngleAxis(-20.0f, new Vector3(0, 1, 0));
-
-
-        RaycastHit hit;
-        //RaycastHit hit1;
-        //RaycastHit hit2;
+    void Raycasting()
+    {      
+        RaycastHit hit;      
         RaycastHit hit3;
         RaycastHit hit4;
-        Debug.DrawLine(_chest.transform.position-new Vector3(0,.3f,0),transform.forward*5000,Color.red);
-        //Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAnglePos * Vector3.forward) * 6, Color.blue);
-        //Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward) * 6, Color.blue);
+        Debug.DrawLine(_chest.transform.position-new Vector3(0,.3f,0),transform.forward*5000,Color.red);       
         Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.green);
         if (Physics.Raycast(_chest.transform.position-new Vector3(0,.5f,0),transform.forward, out hit, Mathf.Infinity))
         {
            
             if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
             {              
-                PassingBall(hit.transform.position, hit.transform.gameObject);                             
+
+              
+               StartCoroutine(PassingBall(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));       
+                
                   
             }
         }
 
-        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAnglePos * Vector3.forward), out hit1, Mathf.Infinity))
-        //{
-        //    if (hit.collider.tag == "Player" && !_joyStick.move)
-        //    {
-        //        PassingBall(hit.transform.position, hit.transform.gameObject);
-        //    }
-        //}
-
-        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAngleNeg * Vector3.forward), out hit2, Mathf.Infinity))
-        //{
-        //    if (hit.collider.tag == "Player" && !_joyStick.move)
-        //    {
-        //        PassingBall(hit.transform.position, hit.transform.gameObject);
-        //    }
-        //}
         if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit3, Mathf.Infinity))
         {
             if (hit3.collider.tag=="OppSeat")
@@ -165,7 +144,6 @@ public class PlayerController : MonoBehaviour
             {
                 ShootingBall();
             }
-            
         }
 
     }
@@ -176,23 +154,34 @@ public class PlayerController : MonoBehaviour
             _ball.transform.DOJump(_basketPos.transform.position, 2, 1, 1.5f);
             _ballRb.useGravity = true;
             _ballRb.isKinematic = false;
+            _ball.GetComponent<SphereCollider>().enabled = true;
+
             _ball.gameObject.transform.SetParent(null);
             isBallOnHand=false;
         }
     }
-    void PassingBall(Vector3 passVector,GameObject AI)
+    IEnumerator PassingBall(Vector3 passVector,GameObject AI)
     {
         if (isBallOnHand )
         {
-            _ball.transform.DOJump(passVector,1,1,.5f);
+            _ball.GetComponent<SphereCollider>().enabled=true;
+            _ball.transform.DOMove(passVector,.1f);
             _ballRb.useGravity = true;
             _ballRb.isKinematic = false;
-            _ball.gameObject.transform.SetParent(null);
-            isBallOnHand = false;
-            Destroy(gameObject.GetComponent<PlayerController>());
-            AI.AddComponent<PlayerController>();
-            gameObject.tag = "Player";
+            _ball.gameObject.transform.SetParent(AI.transform);
+            isBallOnHand = false;           
+            stopAI = true;
+            gameObject.tag = "Player";       
+            yield return new WaitForSeconds(.5f);
+            isBallOnHand = true;
+            stopAI = false;
+            AI.GetComponent<PlayerController>().enabled = true;
+            AI.GetComponent<AIController>().enabled = false;
+            GetComponent<AIController>().enabled = true; 
+            this.enabled = false;
+
+            
+           
         }
     }
-
 }
