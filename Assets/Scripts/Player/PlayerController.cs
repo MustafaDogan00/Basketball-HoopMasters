@@ -21,10 +21,10 @@ public class PlayerController : MonoBehaviour
     private DynamicJoystick _joyStick;
 
     private GameObject _ball;
+    private GameObject _basketPos;
 
     private Transform _chest;
-    [SerializeField] private Transform _basketPos;
-
+   
     public bool isBallOnHand;
     public bool forwOrBack;
    
@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
         _ball = GameObject.FindGameObjectWithTag("Basketball");
         _chest = gameObject.transform.GetChild(1).transform;
         _ballRb = _ball.GetComponent<Rigidbody>();
+        _basketPos = GameObject.FindGameObjectWithTag("BasketPos");
         _ballRb.useGravity = false;
         _ballRb.isKinematic = true;       
     }
@@ -100,25 +101,26 @@ public class PlayerController : MonoBehaviour
             isBallOnHand = true;
             gameObject.tag = "MainPlayer";
         }
-        else
-        {          
-            isBallOnHand=false;
-        }
+        //else
+        //{          
+        //    isBallOnHand=false;
+        //}
     }
 
    void Raycasting()
     {
-        Quaternion spreadAnglePos = Quaternion.AngleAxis(20.0f, new Vector3(0, 1, 0));
-        Quaternion spreadAngleNeg = Quaternion.AngleAxis(-20.0f, new Vector3(0, 1, 0));
+        //Quaternion spreadAnglePos = Quaternion.AngleAxis(20.0f, new Vector3(0, 1, 0));
+        //Quaternion spreadAngleNeg = Quaternion.AngleAxis(-20.0f, new Vector3(0, 1, 0));
 
 
         RaycastHit hit;
-        RaycastHit hit1;
-        RaycastHit hit2;
+        //RaycastHit hit1;
+        //RaycastHit hit2;
         RaycastHit hit3;
+        RaycastHit hit4;
         Debug.DrawLine(_chest.transform.position-new Vector3(0,.3f,0),transform.forward*5000,Color.red);
-        Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAnglePos * Vector3.forward) * 6, Color.blue);
-        Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward) * 6, Color.blue);
+        //Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAnglePos * Vector3.forward) * 6, Color.blue);
+        //Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward) * 6, Color.blue);
         Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.green);
         if (Physics.Raycast(_chest.transform.position-new Vector3(0,.5f,0),transform.forward, out hit, Mathf.Infinity))
         {
@@ -130,21 +132,21 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAnglePos * Vector3.forward), out hit1, Mathf.Infinity))
-        {
-            if (hit.collider.tag == "Player" && !_joyStick.move)
-            {
-                PassingBall(hit.transform.position, hit.transform.gameObject);
-            }
-        }
+        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAnglePos * Vector3.forward), out hit1, Mathf.Infinity))
+        //{
+        //    if (hit.collider.tag == "Player" && !_joyStick.move)
+        //    {
+        //        PassingBall(hit.transform.position, hit.transform.gameObject);
+        //    }
+        //}
 
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAngleNeg * Vector3.forward), out hit2, Mathf.Infinity))
-        {
-            if (hit.collider.tag == "Player" && !_joyStick.move)
-            {
-                PassingBall(hit.transform.position, hit.transform.gameObject);
-            }
-        }
+        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.TransformDirection(spreadAngleNeg * Vector3.forward), out hit2, Mathf.Infinity))
+        //{
+        //    if (hit.collider.tag == "Player" && !_joyStick.move)
+        //    {
+        //        PassingBall(hit.transform.position, hit.transform.gameObject);
+        //    }
+        //}
         if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit3, Mathf.Infinity))
         {
             if (hit3.collider.tag=="OppSeat")
@@ -157,12 +159,21 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit4, Mathf.Infinity))
+        {
+            if (hit3.collider.tag == "Basket2" && !_joyStick.move)
+            {
+                ShootingBall();
+            }
+            
+        }
+
     }
     void ShootingBall()
     {
         if (isBallOnHand && !_joyStick.move)
         {
-            _ball.transform.DOJump(_basketPos.position, 1, 1, 1);
+            _ball.transform.DOJump(_basketPos.transform.position, 2, 1, 1.5f);
             _ballRb.useGravity = true;
             _ballRb.isKinematic = false;
             _ball.gameObject.transform.SetParent(null);

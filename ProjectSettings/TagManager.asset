@@ -14,6 +14,7 @@ TagManager:
   - MainPlayer
   - OppSeat
   - AlleySeat
+  - BasketPos
   layers:
   - Default
   - TransparentFX
