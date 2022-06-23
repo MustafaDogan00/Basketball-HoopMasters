@@ -11,6 +11,9 @@ TagManager:
   - Basket1
   - Basket2
   - Chest
+  - MainPlayer
+  - OppSeat
+  - AlleySeat
   layers:
   - Default
   - TransparentFX

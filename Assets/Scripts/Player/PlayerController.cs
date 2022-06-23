@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _basketPos;
 
     public bool isBallOnHand;
+    public bool forwOrBack;
    
 
     private void Start()
@@ -87,17 +88,21 @@ public class PlayerController : MonoBehaviour
             }
         }
        
-
     }
 
     void BallDistance()
     {
         float distance =Vector3.Distance(gameObject.transform.position, _ball.transform.position);
-        if (distance <=.5f)
+        if (distance <=1.6f)
         {
             _ball.transform.position = _chest.transform.position + transform.forward;
             _ball.gameObject.transform.SetParent(transform);
             isBallOnHand = true;
+            gameObject.tag = "MainPlayer";
+        }
+        else
+        {          
+            isBallOnHand=false;
         }
     }
 
@@ -110,9 +115,11 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         RaycastHit hit1;
         RaycastHit hit2;
+        RaycastHit hit3;
         Debug.DrawLine(_chest.transform.position-new Vector3(0,.3f,0),transform.forward*5000,Color.red);
         Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAnglePos * Vector3.forward) * 6, Color.blue);
         Debug.DrawLine(_chest.transform.position, transform.TransformDirection(spreadAngleNeg * Vector3.forward) * 6, Color.blue);
+        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.green);
         if (Physics.Raycast(_chest.transform.position-new Vector3(0,.5f,0),transform.forward, out hit, Mathf.Infinity))
         {
            
@@ -138,6 +145,18 @@ public class PlayerController : MonoBehaviour
                 PassingBall(hit.transform.position, hit.transform.gameObject);
             }
         }
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit3, Mathf.Infinity))
+        {
+            if (hit3.collider.tag=="OppSeat")
+            {
+                forwOrBack = false;
+            }
+            if (hit3.collider.tag == "AlleySeat")
+            {
+                forwOrBack = true;
+            }
+        }
+
     }
     void ShootingBall()
     {
@@ -161,6 +180,7 @@ public class PlayerController : MonoBehaviour
             isBallOnHand = false;
             Destroy(gameObject.GetComponent<PlayerController>());
             AI.AddComponent<PlayerController>();
+            gameObject.tag = "Player";
         }
     }
 
