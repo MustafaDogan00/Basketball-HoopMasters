@@ -6,15 +6,17 @@ using DG.Tweening;
 public class AIController : MonoBehaviour
 {
 
-    [SerializeField] private Transform _aiTarget1;
-    [SerializeField] private Transform _aiTarget2;
+    [SerializeField] private Transform[] _aiTarget;
 
     [SerializeField] private float _speed;
     [SerializeField] private float _rotationSpeed;
 
     private Animator _animator;
 
-  
+    private int _posNumber;
+
+
+
     void Start()
     {
         _animator=transform.GetChild(0).GetComponent<Animator>();   
@@ -23,12 +25,28 @@ public class AIController : MonoBehaviour
   
     void Update()
     {
+        if (!PlayerController.Instance.forwOrBack)
+        {
+            _posNumber = 0;
+        }
+        else
+        {
+             _posNumber = 1;
+        }
+        Vector3 direction =  _aiTarget[_posNumber].position- transform.position;
+        direction.Normalize();
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRot = Quaternion.LookRotation(direction, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, _rotationSpeed);
+        }
+
 
         if (!PlayerController.Instance.forwOrBack)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _aiTarget1.position, _speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _aiTarget[_posNumber].position, _speed * Time.deltaTime);
             _animator.SetBool("Move",true);
-            if (transform.position==_aiTarget1.position)
+            if (transform.position==_aiTarget[_posNumber].position)
             {
                 _animator.SetBool("Move", false);
                 gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -40,9 +58,9 @@ public class AIController : MonoBehaviour
         }
         else if (PlayerController.Instance.forwOrBack)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _aiTarget2.position, _speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _aiTarget[_posNumber].position, _speed * Time.deltaTime);
             _animator.SetBool("Move", true);
-            if (transform.position == _aiTarget2.position)
+            if (transform.position == _aiTarget[_posNumber].position)
             {
                 _animator.SetBool("Move", false);
                 gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -55,13 +73,7 @@ public class AIController : MonoBehaviour
 
 
 
-        Vector3 direction = _aiTarget1.position - transform.position;
-        direction.Normalize();
-        if (direction!=Vector3.zero)
-        {
-            Quaternion lookRot = Quaternion.LookRotation(direction, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, _rotationSpeed);
-        }
+      
       
        
 
