@@ -18870,6 +18870,7 @@ MonoBehaviour:
   _aiTarget1: {fileID: 132825877}
   _aiTarget2: {fileID: 132825877}
   _speed: 0
+  _rotationSpeed: 0
 --- !u!1001 &1586999519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28144,7 +28145,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!136 &2809703891525344787
 CapsuleCollider:
@@ -28374,7 +28375,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!4 &3810058785300833288
 Transform:
@@ -39208,6 +39209,7 @@ MonoBehaviour:
   _aiTarget1: {fileID: 1577454542}
   _aiTarget2: {fileID: 2140522042}
   _speed: 4
+  _rotationSpeed: 2.37
 --- !u!114 &7877643798790462715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39223,10 +39225,12 @@ MonoBehaviour:
   _playerAnimator: {fileID: 0}
   _movementSpeed: 4
   _rotationSpeed: 0.4
+  _rotation: 0
   whichPlayer: 0
   isBallOnHand: 0
   forwOrBack: 0
   stopAI: 0
+  closestPlayer: 0
 --- !u!54 &8192271363361096609
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -39241,7 +39245,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!136 &8192271363361096610
 CapsuleCollider:
@@ -39272,6 +39276,7 @@ MonoBehaviour:
   _aiTarget1: {fileID: 408482813}
   _aiTarget2: {fileID: 798915795}
   _speed: 4
+  _rotationSpeed: 1.41
 --- !u!114 &8192271363361096612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39287,10 +39292,12 @@ MonoBehaviour:
   _playerAnimator: {fileID: 0}
   _movementSpeed: 4
   _rotationSpeed: 0.4
+  _rotation: 0
   whichPlayer: 0
   isBallOnHand: 0
   forwOrBack: 0
   stopAI: 0
+  closestPlayer: 0
 --- !u!33 &8431529553971715811
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -39402,7 +39409,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &8627832962112281640
 MonoBehaviour:
@@ -39419,6 +39426,7 @@ MonoBehaviour:
   _aiTarget1: {fileID: 657403735}
   _aiTarget2: {fileID: 1733527098}
   _speed: 4
+  _rotationSpeed: 1.26
 --- !u!114 &8627832962112281641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39434,10 +39442,12 @@ MonoBehaviour:
   _playerAnimator: {fileID: 0}
   _movementSpeed: 4
   _rotationSpeed: 0.4
+  _rotation: 0
   whichPlayer: 0
   isBallOnHand: 0
   forwOrBack: 0
   stopAI: 0
+  closestPlayer: 0
 --- !u!95 &8668584960824660198
 Animator:
   serializedVersion: 4
@@ -39490,6 +39500,7 @@ MonoBehaviour:
   _aiTarget1: {fileID: 1009974021}
   _aiTarget2: {fileID: 994331957}
   _speed: 4
+  _rotationSpeed: 3.88
 --- !u!114 &9154024849056811804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39505,7 +39516,9 @@ MonoBehaviour:
   _playerAnimator: {fileID: 0}
   _movementSpeed: 4
   _rotationSpeed: 0.4
+  _rotation: 0
   whichPlayer: 0
   isBallOnHand: 0
   forwOrBack: 0
   stopAI: 0
+  closestPlayer: 0

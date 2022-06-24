@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _movementSpeed=4;
     [SerializeField] private float _rotationSpeed = 0.4f;
+    [SerializeField] private float _rotation;
 
     public int whichPlayer=0;
 
@@ -28,7 +29,12 @@ public class PlayerController : MonoBehaviour
     public bool isBallOnHand;
     public bool forwOrBack;
     public bool stopAI;
-   
+    public bool closestPlayer;
+
+    private Quaternion _q;
+    private Vector3 _v;
+
+
 
     private void Start()
     {
@@ -44,8 +50,7 @@ public class PlayerController : MonoBehaviour
         _ballRb.isKinematic = true;       
     }
 
-
-
+    [System.Obsolete]
     void Update()
     {
             if (_joyStick.move)
@@ -56,7 +61,7 @@ public class PlayerController : MonoBehaviour
                 if (direction != Vector3.zero)
                 {
                     Quaternion lookRot = Quaternion.LookRotation(direction, Vector3.up);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, _rotationSpeed);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, _rotationSpeed);             
                 }
                 transform.position += direction * _movementSpeed * Time.deltaTime;
             }
@@ -89,46 +94,69 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-
+        _rotation+=500*Time.deltaTime;
+         _q = Quaternion.Euler(0, 0, _rotation);
+        _v=_q.ToEulerAngles();
+        if (_rotation>=360)
+        {
+            _rotation=0;
+        }
+      
     }
 
     void BallDistance()
     {
         float distance = Vector3.Distance(gameObject.transform.position, _ball.transform.position);
-        if (distance <= 1.5f)
+        if (distance <= 2f)
         {
             _ball.transform.position = _chest.transform.position;
-            _ball.gameObject.transform.SetParent(transform);
+           // _ball.gameObject.transform.SetParent(transform);
             isBallOnHand = true;
             _ballRb.useGravity = false;
             gameObject.tag = "MainPlayer";
             _ball.GetComponent<SphereCollider>().enabled = false;
         }    
+
+       
     }
 
     void Raycasting()
     {      
         RaycastHit hit;      
+        RaycastHit hit2;      
         RaycastHit hit3;
         RaycastHit hit4;
-        Debug.DrawLine(_chest.transform.position-new Vector3(0,.3f,0),transform.forward*5000,Color.red);       
-        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.green);
-        if (Physics.Raycast(_chest.transform.position-new Vector3(0,.5f,0),transform.forward, out hit, Mathf.Infinity))
-        {
-           
-            if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
-            {              
+     
+        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward+_v)*5000 , Color.blue);
+        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + -_v)*5000 , Color.red);
 
-              
-               StartCoroutine(PassingBall(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));       
-                
-                  
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v)*5000 , out hit, Mathf.Infinity))
+        {
+
+            if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand && !closestPlayer)
+            {
+                StartCoroutine(PassingBall(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
+            }
+        }
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + -_v)*5000 , out hit2, Mathf.Infinity))
+        {
+
+            if (hit2.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
+            {
+                if (Vector3.Distance(hit2.collider.gameObject.transform.position, transform.position) <= Vector3.Distance(hit.collider.gameObject.transform.position, transform.position))
+                {
+                    StartCoroutine(PassingBall(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
+                    closestPlayer = true;
+                }
+
             }
         }
 
+
+
         if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit3, Mathf.Infinity))
         {
-            if (hit3.collider.tag=="OppSeat")
+            if (hit3.collider.tag == "OppSeat")
             {
                 forwOrBack = false;
             }
@@ -175,6 +203,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(.5f);
             isBallOnHand = true;
             stopAI = false;
+            _playerAnimator.SetBool("Move",false);
             AI.GetComponent<PlayerController>().enabled = true;
             AI.GetComponent<AIController>().enabled = false;
             GetComponent<AIController>().enabled = true; 
