@@ -15,6 +15,14 @@ TagManager:
   - OppSeat
   - AlleySeat
   - BasketPos
+  - BallFallPos
+  - LeftCollider
+  - MiddleCollider
+  - RightCollider
+  - LeftColliderBasket
+  - RightColliderBasket
+  - LeftColliderFall
+  - RightColliderFall
   layers:
   - Default
   - TransparentFX
