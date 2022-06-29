@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _rotation;
 
     public int whichPlayer = 0;
-    public int whichBasket = 0;
+    public int whichBasket;
 
     private Rigidbody _playerRigidbody;
     private Rigidbody _ballRb;
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     private GameObject _ball;
     [HideInInspector]
-    public  GameObject _basketPos,_leftBasketPos,_rightBasketPos;
+    public GameObject _basketPos, _leftBasketPos, _rightBasketPos;
 
     private Transform _chest;
 
@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     public bool stopAI;
     public bool closestPlayer;
     public bool passBall;
+    public bool example;
+    public bool isTouchingBasket;
 
     private Quaternion _q;
     private Vector3 _v;
@@ -47,10 +49,10 @@ public class PlayerController : MonoBehaviour
         _chest = gameObject.transform.GetChild(1).transform;
         _ballRb = _ball.GetComponent<Rigidbody>();
         _basketPos = GameObject.FindGameObjectWithTag("BasketPos");
-        _leftBasketPos = GameObject.FindGameObjectWithTag("LeftColliderBasket");       
+        _leftBasketPos = GameObject.FindGameObjectWithTag("LeftColliderBasket");
         _rightBasketPos = GameObject.FindGameObjectWithTag("RightColliderBasket");
 
-       
+
     }
 
     [System.Obsolete]
@@ -108,12 +110,11 @@ public class PlayerController : MonoBehaviour
         {
             whichPlayer = 5;
         }
-        
+
 
         BallDistance();
         Raycasting();
 
-      
     }
 
     void BallDistance()
@@ -121,120 +122,140 @@ public class PlayerController : MonoBehaviour
         float distance = Vector3.Distance(gameObject.transform.position, _ball.transform.position);
         if (distance <= 2f)
         {
-            _ball.transform.position = _chest.transform.position;
-            // _ball.gameObject.transform.SetParent(transform);
+            if (!example)
+            {
+                _ball.transform.position = _chest.transform.position;
+                _ball.gameObject.transform.SetParent(transform);
+            }       
             isBallOnHand = true;
-
             gameObject.tag = "MainPlayer";
-            //_ball.GetComponent<SphereCollider>().enabled = false;
             passBall = false;
         }
         else
         {
             gameObject.tag = "Player";
             isBallOnHand = false;
+            example = false;
         }
 
 
-    }
-
-    void Raycasting()
-    {
-        RaycastHit hit;
-        RaycastHit hit2;
-        RaycastHit hit3;
-        RaycastHit hit4;
-
-        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + _v) * 5000, Color.blue);
-        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + -_v) * 5000, Color.red);
-        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
-
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v) * 5000, out hit, Mathf.Infinity))
-        {
-            if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand && !closestPlayer)
-            {
-                StartCoroutine(ChangingPlayer(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
-            }
         }
 
-
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + -_v) * 5000, out hit2, Mathf.Infinity))
+        void Raycasting()
         {
-            if (hit2.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
+            //RaycastHit hit;
+            //RaycastHit hit2;
+            //RaycastHit hit3;
+            RaycastHit hit4;
+
+            //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + _v) * 5000, Color.blue);
+            //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + -_v) * 5000, Color.red);
+            Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
+
+            //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v) * 5000, out hit, Mathf.Infinity))
+            //{
+            //    if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand && !closestPlayer)
+            //    {
+            //       // StartCoroutine(ChangingPlayer(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
+            //    }
+            //}
+
+
+            //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + -_v) * 5000, out hit2, Mathf.Infinity))
+            //{
+            //    if (hit2.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
+            //    {
+            //        if (Vector3.Distance(hit2.collider.gameObject.transform.position, transform.position) <= Vector3.Distance(hit.collider.gameObject.transform.position, transform.position))
+            //        {
+            //            //StartCoroutine(ChangingPlayer(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
+            //            closestPlayer = true;
+            //            passBall = true;
+
+            //        }
+            //    }
+            //}
+
+            //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit3, Mathf.Infinity))
+            //{
+            //    if (hit3.collider.tag == "OppSeat")
+            //    {
+            //        forwOrBack = false;
+            //    }
+            //    if (hit3.collider.tag == "AlleySeat")
+            //    {
+            //        forwOrBack = true;
+            //    }
+            //}
+
+            if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit4, Mathf.Infinity))
             {
-                if (Vector3.Distance(hit2.collider.gameObject.transform.position, transform.position) <= Vector3.Distance(hit.collider.gameObject.transform.position, transform.position))
+                if (hit4.collider.tag == "LeftCollider" && !_joyStick.move)
                 {
-                    StartCoroutine(ChangingPlayer(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
-                    closestPlayer = true;
-                    passBall = true;
+
+                    if (transform.position.z >= 0 && isBallOnHand)
+                    {
+                        whichBasket = 0;
+                        isTouchingBasket = true;
+                    }
+                    else
+                    {
+                         isTouchingBasket=false;
+                    }
 
                 }
+                 if (hit4.collider.tag == "MiddleCollider" && !_joyStick.move)
+                {
+                    if (transform.position.z >= 0 && isBallOnHand)
+                    {
+                        whichBasket = 1;
+                        isTouchingBasket = true;
+                    }
+                    else
+                    {
+                        isTouchingBasket = false;
+                    }
+
+            }
+                if (hit4.collider.tag == "RightCollider" && !_joyStick.move)
+                {
+                    if (transform.position.z >= 0 && isBallOnHand)
+                    {
+                        whichBasket = 2;
+                        isTouchingBasket = true;
+                    }
+                    else
+                    {
+                        isTouchingBasket = false;
+                    }
+            }
+           
             }
         }
 
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit3, Mathf.Infinity))
-        {
-            if (hit3.collider.tag == "OppSeat")
-            {
-                forwOrBack = false;
-            }
-            if (hit3.collider.tag == "AlleySeat")
-            {
-                forwOrBack = true;
-            }
-        }
+        //IEnumerator ChangingPlayer(Vector3 passVector, GameObject AI)
+        //{
+        //    if (isBallOnHand)
+        //    {
+        //        _ball.GetComponent<SphereCollider>().enabled = true;
+        //         _ball.transform.DOMove(passVector,.1f);
+        //        _ballRb.useGravity = true;
+        //        _ballRb.isKinematic = false;
+        //        _ball.gameObject.transform.SetParent(AI.transform);
+        //        isBallOnHand = false;
+        //        stopAI = true;
+        //        gameObject.tag = "Player";
+        //        yield return new WaitForSeconds(.5f);
+        //        isBallOnHand = true;
+        //        stopAI = false;
+        //        _playerAnimator.SetBool("Move", false);
+        //        AI.GetComponent<PlayerController>().enabled = true;
+        //        AI.GetComponent<AIController>().enabled = false;
+        //        GetComponent<AIController>().enabled = true;
+        //        this.enabled = false;
+        //    }
+        //}
 
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit4, Mathf.Infinity))
-        {
-            if (hit4.collider.tag == "LeftCollider" && !_joyStick.move)
-            {
 
-                if (transform.position.z >= 0 && isBallOnHand)
-                {                
-                        Ball.Instance.Shoot(_leftBasketPos);
-                }
-               
-            }
-            if (hit4.collider.tag == "MiddleCollider" && !_joyStick.move)
-            {
-                if (transform.position.z >= 0 && isBallOnHand )
-                {                                      
-                        Ball.Instance.Shoot(_basketPos);
-                }
-
-            }
-            if (hit4.collider.tag == "RightCollider" && !_joyStick.move)
-            {
-                if (transform.position.z >= 0 && isBallOnHand)
-                {                  
-                        Ball.Instance.Shoot(_rightBasketPos);
-                }
-            }
-        }
-    }
-
-    IEnumerator ChangingPlayer(Vector3 passVector, GameObject AI)
-    {
-        if (isBallOnHand)
-        {
-            _ball.GetComponent<SphereCollider>().enabled = true;
-             _ball.transform.DOMove(passVector,.1f);
-            _ballRb.useGravity = true;
-            _ballRb.isKinematic = false;
-            _ball.gameObject.transform.SetParent(AI.transform);
-            isBallOnHand = false;
-            stopAI = true;
-            gameObject.tag = "Player";
-            yield return new WaitForSeconds(.5f);
-            isBallOnHand = true;
-            stopAI = false;
-            _playerAnimator.SetBool("Move", false);
-            AI.GetComponent<PlayerController>().enabled = true;
-            AI.GetComponent<AIController>().enabled = false;
-            GetComponent<AIController>().enabled = true;
-            this.enabled = false;
-        }
-    }
-
+    
    
 }
