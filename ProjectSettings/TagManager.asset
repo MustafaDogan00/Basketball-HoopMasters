@@ -23,6 +23,7 @@ TagManager:
   - RightColliderBasket
   - LeftColliderFall
   - RightColliderFall
+  - Swish
   layers:
   - Default
   - TransparentFX
