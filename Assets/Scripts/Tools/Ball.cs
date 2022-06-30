@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Ball : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Ball : MonoBehaviour
 
     private float _distanceY;
     private float _g = -18f;
+    private float _passSpeed= 18f;
     [SerializeField] private float _h = 5f;
 
     private Vector3 _velocityY, _velocityXZ, _distanceXZ;
@@ -58,5 +60,15 @@ public class Ball : MonoBehaviour
            GetComponent<AudioSource>().Play();
         }
     }
+
+    public void Pass(GameObject g,GameObject a)
+    {
+        PlayerController.Instance.example = true;
+        gameObject.transform.SetParent(a.transform);
+        gameObject.transform.DOMove(g.transform.position, .1f);
+
+
+    }
+
 
 }
