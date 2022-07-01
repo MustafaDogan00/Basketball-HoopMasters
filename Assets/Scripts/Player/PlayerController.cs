@@ -15,12 +15,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _movementSpeed = 4;
     [SerializeField] private float _rotationSpeed = 0.4f;
-    [SerializeField] private float _rotation;
+    private float _rotation;
+    private float _rotationLimit=60;
+    private float _rotationPower=150;
 
     public int whichPlayer = 0;
     public int whichBasket;
 
-    private Rigidbody _playerRigidbody;
     private Rigidbody _ballRb;
 
     private DynamicJoystick _joyStick;
@@ -33,9 +34,6 @@ public class PlayerController : MonoBehaviour
 
     public bool isBallOnHand;
     public bool forwOrBack;
-    public bool stopAI;
-    public bool closestPlayer;
-    public bool passBall;
     public bool example;
     public bool isTouchingBasket;
 
@@ -51,8 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         Instance = this;
         _joyStick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<DynamicJoystick>();
-        _playerAnimator = transform.GetChild(0).GetComponent<Animator>();
-        _playerRigidbody = GetComponent<Rigidbody>();
+        _playerAnimator = transform.GetChild(0).GetComponent<Animator>();       
         _ball = GameObject.FindGameObjectWithTag("Basketball");
         _chest = gameObject.transform.GetChild(1).transform;
         _ballRb = _ball.GetComponent<Rigidbody>();
@@ -65,10 +62,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        _rotation += 500 * Time.deltaTime;
+        _rotation += _rotationPower * Time.deltaTime;
         _q = Quaternion.Euler(0, 0, _rotation);
         _v = _q.ToEulerAngles();
-        if (_rotation >= 360)
+        if (_rotation >= _rotationLimit)
         {
             _rotation = 0;
         }
@@ -118,7 +115,6 @@ public class PlayerController : MonoBehaviour
 
         BallDistance();
         Raycasting();
-        SwitchPlayer();
     }
 
     void BallDistance()
@@ -129,11 +125,9 @@ public class PlayerController : MonoBehaviour
             if (!example)
             {
                 _ball.transform.position = _chest.transform.position;
-                _ball.gameObject.transform.SetParent(transform);
             }
             isBallOnHand = true;
             gameObject.tag = "MainPlayer";
-            passBall = false;
         }
         else
         {
@@ -145,22 +139,22 @@ public class PlayerController : MonoBehaviour
 
     void Raycasting()
     {
-        //RaycastHit hit;
+        RaycastHit hit;
         //RaycastHit hit2;
         RaycastHit hit3;
         RaycastHit hit4;
 
-        //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + _v) * 5000, Color.blue);
+        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + _v) * 500, Color.blue);
         //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + -_v) * 5000, Color.red);
-        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
+        //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
 
-        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v) * 5000, out hit, Mathf.Infinity))
-        //{
-        //    if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand && !closestPlayer)
-        //    {
-        //         StartCoroutine(ChangingPlayer(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
-        //    }
-        //}
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v) * 500, out hit, Mathf.Infinity))
+        {
+            if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
+            {
+                SwitchPlayer(hit.collider.gameObject);
+            }
+        }
 
 
         //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + -_v) * 5000, out hit2, Mathf.Infinity))
@@ -250,11 +244,9 @@ public class PlayerController : MonoBehaviour
             _ballRb.isKinematic = false;
             _ball.gameObject.transform.SetParent(AI.transform);
             isBallOnHand = false;
-            stopAI = true;
             gameObject.tag = "Player";
             yield return new WaitForSeconds(.5f);
             isBallOnHand = true;
-            stopAI = false;
             _playerAnimator.SetBool("Move", false);
             AI.GetComponent<PlayerController>().enabled = true;
             AI.GetComponent<AIController>().enabled = false;
@@ -264,31 +256,31 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void SwitchPlayer()
+    private void SwitchPlayer(GameObject g)
     {
-        var smallestDistance = teammates
-            .OrderBy(t => Vector3.Distance(gameObject.transform.position, t.transform.position))
-            .FirstOrDefault();
+
         if (!_joyStick.move && isBallOnHand)
         {
-            Ball.Instance.Pass(smallestDistance.gameObject.transform.GetChild(1).gameObject,smallestDistance.gameObject);
+           // var smallestDistance = teammates
+           //.OrderBy(t => Vector3.Distance(gameObject.transform.position, t.transform.position))
+           //.FirstOrDefault();
+
+            _ball.transform.DOMove(g.transform.GetChild(1).transform.position,.1f);
             _ballRb.useGravity = true;
             _ballRb.isKinematic = false;
             isBallOnHand = false;
-            stopAI = true;
             gameObject.tag = "Player";
-            isBallOnHand = true;
-            stopAI = false;
             _playerAnimator.SetBool("Move", false);
-            smallestDistance.gameObject.GetComponent<PlayerController>().enabled = true;
-            smallestDistance.gameObject.GetComponent<AIController>().enabled = false;
+            example =true;
+            _ball.transform.SetParent(g.transform);
+            g.GetComponent<PlayerController>().enabled = true;
+            g.GetComponent<AIController>().enabled = false;
             GetComponent<AIController>().enabled = true;
             this.enabled = false;
-
         }
-
-
     }
 
-
+   
+       
+    
 }

@@ -46062,7 +46062,6 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _rotation: 167.3478
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46070,9 +46069,6 @@ MonoBehaviour:
   _rightBasketPos: {fileID: 0}
   isBallOnHand: 0
   forwOrBack: 0
-  stopAI: 0
-  closestPlayer: 0
-  passBall: 0
   example: 0
   isTouchingBasket: 0
 --- !u!54 &8192271363361096609
@@ -46137,7 +46133,6 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _rotation: 167.3478
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46145,9 +46140,6 @@ MonoBehaviour:
   _rightBasketPos: {fileID: 0}
   isBallOnHand: 0
   forwOrBack: 0
-  stopAI: 0
-  closestPlayer: 0
-  passBall: 0
   example: 0
   isTouchingBasket: 0
 --- !u!33 &8431529553971715811
@@ -46295,7 +46287,6 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _rotation: 167.3478
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46303,9 +46294,6 @@ MonoBehaviour:
   _rightBasketPos: {fileID: 0}
   isBallOnHand: 0
   forwOrBack: 0
-  stopAI: 0
-  closestPlayer: 0
-  passBall: 0
   example: 0
   isTouchingBasket: 0
 --- !u!95 &8668584960824660198
@@ -46377,7 +46365,6 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _rotation: 167.3478
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46385,8 +46372,5 @@ MonoBehaviour:
   _rightBasketPos: {fileID: 0}
   isBallOnHand: 0
   forwOrBack: 0
-  stopAI: 0
-  closestPlayer: 0
-  passBall: 0
   example: 0
   isTouchingBasket: 0
