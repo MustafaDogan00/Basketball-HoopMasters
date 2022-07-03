@@ -26168,7 +26168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2784354415482946703
 Transform:
   m_ObjectHideFlags: 0
@@ -37935,7 +37935,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4187743914921165128
 Transform:
   m_ObjectHideFlags: 0
@@ -37944,7 +37944,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7043266876021372180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.23, y: 0.12, z: -2.41}
+  m_LocalPosition: {x: -0.23, y: 0.12, z: -11.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38085,7 +38085,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7472112605006588562}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.1249998, y: 0.12, z: -0.5199999}
+  m_LocalPosition: {x: -3.42, y: 0.12, z: 6.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -39596,7 +39596,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.7
+  m_Time: 0.3
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -39635,7 +39635,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.4201027, b: 0.3433962, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
       key1: {r: 0.9433962, g: 0.63660187, b: 0.35065857, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -40177,8 +40177,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
+      propertyPath: target1
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
+      propertyPath: target2
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
+      propertyPath: target3
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
       propertyPath: _rotation
       value: 167.3478
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
+      propertyPath: _ballSpeed
+      value: 59.25
       objectReference: {fileID: 0}
     - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
       propertyPath: _basketPos
@@ -40324,7 +40344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!137 &7086173806631974633
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -46097,7 +46117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &7644757298915100421
 Animator:
   serializedVersion: 4
@@ -46139,7 +46159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3958783108104300709}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.6199999, y: 0.12, z: -4.2399993}
+  m_LocalPosition: {x: -7.23, y: 0.12, z: -4.2399993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46180,6 +46200,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
+  _ballSpeed: 0
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46251,6 +46272,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
+  _ballSpeed: 0
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46405,6 +46427,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
+  _ballSpeed: 0
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46442,7 +46465,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2642150728000880454}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.85, y: 0.12, z: -4.24}
+  m_LocalPosition: {x: 4.89, y: 0.12, z: -4.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46483,6 +46506,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
+  _ballSpeed: 0
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}

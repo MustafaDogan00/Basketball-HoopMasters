@@ -8,16 +8,18 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
 
-    private PlayerController[] teammates;
-
     [HideInInspector]
     public Animator _playerAnimator;
 
     [SerializeField] private float _movementSpeed = 4;
     [SerializeField] private float _rotationSpeed = 0.4f;
+    [SerializeField] private float _ballSpeed;
     private float _rotation;
     private float _rotationLimit=60;
     private float _rotationPower=150;
+    private float[] _angle;
+  
+
 
     public int whichPlayer = 0;
     public int whichBasket;
@@ -29,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private GameObject _ball;
     [HideInInspector]
     public GameObject _basketPos, _leftBasketPos, _rightBasketPos;
+    private PlayerController[] _teammates;
 
     private Transform _chest;
 
@@ -40,10 +43,9 @@ public class PlayerController : MonoBehaviour
     private Quaternion _q;
     private Vector3 _v;
 
-
     private void Awake()
     {
-        teammates = FindObjectsOfType<PlayerController>().Where(t => t != this).ToArray();
+        _teammates=FindObjectsOfType<PlayerController>().Where(t => t != this).ToArray();
     }
     private void Start()
     {
@@ -60,15 +62,14 @@ public class PlayerController : MonoBehaviour
 
     [System.Obsolete]
     void Update()
-    {
-
-        _rotation += _rotationPower * Time.deltaTime;
-        _q = Quaternion.Euler(0, 0, _rotation);
-        _v = _q.ToEulerAngles();
-        if (_rotation >= _rotationLimit)
-        {
-            _rotation = 0;
-        }
+    {                         
+        //_rotation += _rotationPower * Time.deltaTime;
+        //_q = Quaternion.Euler(0, 0, _rotation);
+        //_v = _q.ToEulerAngles();
+        //if (_rotation >= _rotationLimit)
+        //{
+        //    _rotation = 0;
+        //}
 
         if (_joyStick.move)
         {
@@ -86,6 +87,42 @@ public class PlayerController : MonoBehaviour
         {
             _playerAnimator.SetBool("Move", false);
         }
+
+        if (!_joyStick.move && isBallOnHand)
+        {
+            var targetPlayer = ClosestAngle();
+            if (targetPlayer != null)
+            {
+             PassBallToPlayer(targetPlayer);
+            }
+        }
+        BallDistance();
+        Raycasting();
+        ClosestAngle();
+        WhichPlayer();
+
+    }
+
+    void BallDistance()
+    {
+        float distance = Vector3.Distance(gameObject.transform.position, _ball.transform.position);
+        if (distance <= 2f)
+        {
+            if (!example)
+            {
+                _ball.transform.position = _chest.transform.position;
+            }
+            isBallOnHand = true;
+            gameObject.tag = "MainPlayer";
+        }
+        else
+        {
+            isBallOnHand = false;
+            example = false;
+        }
+    }
+    void WhichPlayer()
+    {
 
         if (isBallOnHand)
         {
@@ -112,49 +149,25 @@ public class PlayerController : MonoBehaviour
         {
             whichPlayer = 5;
         }
-
-        BallDistance();
-        Raycasting();
     }
-
-    void BallDistance()
-    {
-        float distance = Vector3.Distance(gameObject.transform.position, _ball.transform.position);
-        if (distance <= 2f)
-        {
-            if (!example)
-            {
-                _ball.transform.position = _chest.transform.position;
-            }
-            isBallOnHand = true;
-            gameObject.tag = "MainPlayer";
-        }
-        else
-        {
-            gameObject.tag = "Player";
-            isBallOnHand = false;
-            example = false;
-        }
-    }
-
     void Raycasting()
     {
-        RaycastHit hit;
+        //RaycastHit hit;
         //RaycastHit hit2;
         RaycastHit hit3;
         RaycastHit hit4;
 
-        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + _v) * 500, Color.blue);
+        //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + _v) * 500, Color.blue);
         //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + -_v) * 5000, Color.red);
         //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
 
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v) * 500, out hit, Mathf.Infinity))
-        {
-            if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
-            {
-                SwitchPlayer(hit.collider.gameObject);
-            }
-        }
+        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v) * 500, out hit, Mathf.Infinity))
+        //{
+        //    if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
+        //    {
+        //        SwitchPlayer(hit.collider.gameObject);
+        //    }
+        //}
 
 
         //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + -_v) * 5000, out hit2, Mathf.Infinity))
@@ -229,58 +242,59 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-
+               
             }
     }
-            
 
-    IEnumerator ChangingPlayer(Vector3 passVector, GameObject AI)
+
+    //IEnumerator ChangingPlayer(Vector3 passVector, GameObject AI)
+    //{
+    //    if (isBallOnHand)
+    //    {
+    //        _ball.GetComponent<SphereCollider>().enabled = true;
+    //        _ball.transform.DOMove(passVector, .1f);
+    //        _ballRb.useGravity = true;
+    //        _ballRb.isKinematic = false;
+    //        _ball.gameObject.transform.SetParent(AI.transform);
+    //        isBallOnHand = false;
+    //        gameObject.tag = "Player";
+    //        yield return new WaitForSeconds(.5f);
+    //        isBallOnHand = true;
+    //        _playerAnimator.SetBool("Move", false);
+    //        AI.GetComponent<PlayerController>().enabled = true;
+    //        AI.GetComponent<AIController>().enabled = false;
+    //        GetComponent<AIController>().enabled = true;
+    //        this.enabled = false;
+    //    }
+    //}
+
+       private Vector3 DirectionTo(PlayerController player)
+       {
+         return Vector3.Normalize(player.transform.position - transform.position);
+       }
+       private PlayerController ClosestAngle()
+       {
+            PlayerController selectedPlayer = null;
+            float angle = Mathf.Infinity;
+            foreach (var player in _teammates)
+            {
+                var directionToPlayer = DirectionTo(player);
+                Debug.DrawRay(transform.position, directionToPlayer, Color.blue);
+                var playerAngle=Vector3.Angle(transform.forward, directionToPlayer);
+                if (playerAngle < angle)
+                {
+                    selectedPlayer = player;
+                    angle = playerAngle;
+                }              
+            }
+              return selectedPlayer;
+       }
+
+    private void PassBallToPlayer(PlayerController targetPlayer)
     {
-        if (isBallOnHand)
-        {
-            _ball.GetComponent<SphereCollider>().enabled = true;
-            _ball.transform.DOMove(passVector, .1f);
-            _ballRb.useGravity = true;
-            _ballRb.isKinematic = false;
-            _ball.gameObject.transform.SetParent(AI.transform);
-            isBallOnHand = false;
-            gameObject.tag = "Player";
-            yield return new WaitForSeconds(.5f);
-            isBallOnHand = true;
-            _playerAnimator.SetBool("Move", false);
-            AI.GetComponent<PlayerController>().enabled = true;
-            AI.GetComponent<AIController>().enabled = false;
-            GetComponent<AIController>().enabled = true;
-            this.enabled = false;
-        }
+        var direction = DirectionTo(targetPlayer);
+        _ball.transform.SetParent(null);
+        _ball.GetComponent<Rigidbody>().isKinematic = false;
+        _ball.GetComponent<Rigidbody>().AddForce(direction*_ballSpeed*Time.deltaTime);
     }
-
-
-    private void SwitchPlayer(GameObject g)
-    {
-
-        if (!_joyStick.move && isBallOnHand)
-        {
-           // var smallestDistance = teammates
-           //.OrderBy(t => Vector3.Distance(gameObject.transform.position, t.transform.position))
-           //.FirstOrDefault();
-
-            _ball.transform.DOMove(g.transform.GetChild(1).transform.position,.1f);
-            _ballRb.useGravity = true;
-            _ballRb.isKinematic = false;
-            isBallOnHand = false;
-            gameObject.tag = "Player";
-            _playerAnimator.SetBool("Move", false);
-            example =true;
-            _ball.transform.SetParent(g.transform);
-            g.GetComponent<PlayerController>().enabled = true;
-            g.GetComponent<AIController>().enabled = false;
-            GetComponent<AIController>().enabled = true;
-            this.enabled = false;
-        }
-    }
-
-   
-       
-    
 }
