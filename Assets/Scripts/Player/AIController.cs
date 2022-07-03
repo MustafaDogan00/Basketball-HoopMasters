@@ -50,11 +50,7 @@ void Update()
         {
             _animator.SetBool("Move", false);
             gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        }
-        else
-        {
-            gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        }
+        }      
     }
     else if (PlayerController.Instance.forwOrBack)
     {
@@ -64,11 +60,7 @@ void Update()
         {
             _animator.SetBool("Move", false);
             gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        }
-        else
-        {
-            gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        }
+        }       
     }
 
 

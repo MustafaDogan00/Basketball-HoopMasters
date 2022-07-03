@@ -14,12 +14,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _movementSpeed = 4;
     [SerializeField] private float _rotationSpeed = 0.4f;
     [SerializeField] private float _ballSpeed;
-    private float _rotation;
-    private float _rotationLimit=60;
-    private float _rotationPower=150;
-    private float[] _angle;
-  
-
 
     public int whichPlayer = 0;
     public int whichBasket;
@@ -31,7 +25,6 @@ public class PlayerController : MonoBehaviour
     private GameObject _ball;
     [HideInInspector]
     public GameObject _basketPos, _leftBasketPos, _rightBasketPos;
-    private PlayerController[] _teammates;
 
     private Transform _chest;
 
@@ -39,14 +32,13 @@ public class PlayerController : MonoBehaviour
     public bool forwOrBack;
     public bool example;
     public bool isTouchingBasket;
+    [SerializeField] private bool _canPass;
 
     private Quaternion _q;
     private Vector3 _v;
 
-    private void Awake()
-    {
-        _teammates=FindObjectsOfType<PlayerController>().Where(t => t != this).ToArray();
-    }
+    List<Vector3> directions=new List<Vector3>();
+   
     private void Start()
     {
         Instance = this;
@@ -63,15 +55,8 @@ public class PlayerController : MonoBehaviour
     [System.Obsolete]
     void Update()
     {                         
-        //_rotation += _rotationPower * Time.deltaTime;
-        //_q = Quaternion.Euler(0, 0, _rotation);
-        //_v = _q.ToEulerAngles();
-        //if (_rotation >= _rotationLimit)
-        //{
-        //    _rotation = 0;
-        //}
-
-        if (_joyStick.move)
+        
+        if (_joyStick.move)         
         {
             _playerAnimator.SetBool("Move", true);
 
@@ -82,25 +67,25 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, _rotationSpeed);
             }
             transform.position += direction * _movementSpeed * Time.deltaTime;
+            if (direction.magnitude >=.7f)
+            {
+                _canPass = false;
+            }
         }
         else
         {
             _playerAnimator.SetBool("Move", false);
         }
 
-        if (!_joyStick.move && isBallOnHand)
-        {
-            var targetPlayer = ClosestAngle();
-            if (targetPlayer != null)
-            {
-             PassBallToPlayer(targetPlayer);
-            }
-        }
+        
         BallDistance();
         Raycasting();
-        ClosestAngle();
         WhichPlayer();
-
+        if (!_joyStick.move && !_canPass && isBallOnHand)
+        {
+            PassBall();
+        }
+       
     }
 
     void BallDistance()
@@ -151,55 +136,29 @@ public class PlayerController : MonoBehaviour
         }
     }
     void Raycasting()
-    {
-        //RaycastHit hit;
-        //RaycastHit hit2;
-        RaycastHit hit3;
-        RaycastHit hit4;
+    {      
+        RaycastHit hit;
+        RaycastHit hit1;
 
-        //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + _v) * 500, Color.blue);
-        //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), (transform.forward + -_v) * 5000, Color.red);
-        //Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
+        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
 
-        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + _v) * 500, out hit, Mathf.Infinity))
-        //{
-        //    if (hit.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
-        //    {
-        //        SwitchPlayer(hit.collider.gameObject);
-        //    }
-        //}
-
-
-        //if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), (transform.forward + -_v) * 5000, out hit2, Mathf.Infinity))
-        //{
-        //    if (hit2.collider.tag == "Player" && !_joyStick.move && isBallOnHand)
-        //    {
-        //        if (Vector3.Distance(hit2.collider.gameObject.transform.position, transform.position) <= Vector3.Distance(hit.collider.gameObject.transform.position, transform.position))
-        //        {
-        //            StartCoroutine(ChangingPlayer(hit.transform.GetChild(1).transform.position, hit.transform.gameObject));
-        //            closestPlayer = true;
-        //            passBall = true;
-        //        }
-        //    }
-        //}
-
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit3, Mathf.Infinity))
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit, Mathf.Infinity))
         {
-            if (hit3.collider.tag == "OppSeat")
+            if (hit.collider.tag == "OppSeat")
             {
                 forwOrBack = false;
             }
-            if (hit3.collider.tag == "AlleySeat")
+            if (hit.collider.tag == "AlleySeat")
             {
                 forwOrBack = true;
             }
         }
 
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit4, Mathf.Infinity))
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit1, Mathf.Infinity))
 
-            if (hit4.collider!=null)
+            if (hit1.collider!=null)
             {
-                if (hit4.collider.tag == "LeftCollider" && !_joyStick.move)
+                if (hit1.collider.tag == "LeftCollider" && !_joyStick.move)
                 {
 
                     if (transform.position.z >= 0 && isBallOnHand)
@@ -213,8 +172,7 @@ public class PlayerController : MonoBehaviour
                     }
 
                 }
-
-                if (hit4.collider.tag == "MiddleCollider" && !_joyStick.move)
+                if (hit1.collider.tag == "MiddleCollider" && !_joyStick.move)
                 {
                     if (transform.position.z >= 0 && isBallOnHand)
                     {
@@ -227,9 +185,7 @@ public class PlayerController : MonoBehaviour
                     }
 
                 }
-
-
-                if (hit4.collider.tag == "RightCollider" && !_joyStick.move)
+                if (hit1.collider.tag == "RightCollider" && !_joyStick.move)
                 {
                     if (transform.position.z >= 0 && isBallOnHand)
                     {
@@ -240,61 +196,39 @@ public class PlayerController : MonoBehaviour
                     {
                         isTouchingBasket = false;
                     }
-                }
-
-               
-            }
-    }
-
-
-    //IEnumerator ChangingPlayer(Vector3 passVector, GameObject AI)
-    //{
-    //    if (isBallOnHand)
-    //    {
-    //        _ball.GetComponent<SphereCollider>().enabled = true;
-    //        _ball.transform.DOMove(passVector, .1f);
-    //        _ballRb.useGravity = true;
-    //        _ballRb.isKinematic = false;
-    //        _ball.gameObject.transform.SetParent(AI.transform);
-    //        isBallOnHand = false;
-    //        gameObject.tag = "Player";
-    //        yield return new WaitForSeconds(.5f);
-    //        isBallOnHand = true;
-    //        _playerAnimator.SetBool("Move", false);
-    //        AI.GetComponent<PlayerController>().enabled = true;
-    //        AI.GetComponent<AIController>().enabled = false;
-    //        GetComponent<AIController>().enabled = true;
-    //        this.enabled = false;
-    //    }
-    //}
-
-       private Vector3 DirectionTo(PlayerController player)
-       {
-         return Vector3.Normalize(player.transform.position - transform.position);
-       }
-       private PlayerController ClosestAngle()
-       {
-            PlayerController selectedPlayer = null;
-            float angle = Mathf.Infinity;
-            foreach (var player in _teammates)
-            {
-                var directionToPlayer = DirectionTo(player);
-                Debug.DrawRay(transform.position, directionToPlayer, Color.blue);
-                var playerAngle=Vector3.Angle(transform.forward, directionToPlayer);
-                if (playerAngle < angle)
-                {
-                    selectedPlayer = player;
-                    angle = playerAngle;
                 }              
             }
-              return selectedPlayer;
-       }
-
-    private void PassBallToPlayer(PlayerController targetPlayer)
-    {
-        var direction = DirectionTo(targetPlayer);
-        _ball.transform.SetParent(null);
-        _ball.GetComponent<Rigidbody>().isKinematic = false;
-        _ball.GetComponent<Rigidbody>().AddForce(direction*_ballSpeed*Time.deltaTime);
     }
+    void PassBall()
+    {
+            isBallOnHand = false;
+            _canPass = true;
+            _ball.transform.DOMove(FindClosestPlayer().GetChild(1).position, .5f);          
+            _ball.gameObject.transform.SetParent(null);
+            _ball.gameObject.transform.SetParent(FindClosestPlayer());
+            FindClosestPlayer().GetComponent<PlayerController>().enabled = true;
+            FindClosestPlayer().GetComponent<AIController>().enabled = false;
+            gameObject.tag = "Player";
+            GetComponent<AIController>().enabled = true;          
+            this.enabled = false;                      
+    }
+    Transform FindClosestPlayer()
+    {
+        float closestAngle=Mathf.Infinity;
+        float currentAngle;
+        Transform closestPlayer=null;
+
+        foreach (var item in GameObject.FindGameObjectsWithTag("Player"))
+        {
+          currentAngle=Mathf.Abs(Vector3.Angle(transform.forward,item.transform.position-transform.position));
+            if (currentAngle<closestAngle)
+            {
+                closestAngle=currentAngle;
+                closestPlayer = item.transform;
+            }
+        }
+        return closestPlayer;     
+    }
+
+   
 }

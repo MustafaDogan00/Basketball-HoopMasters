@@ -2371,7 +2371,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132825876}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.38, y: 0, z: 1.53}
+  m_LocalPosition: {x: -0.38, y: 0, z: -6.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15792,7 +15792,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1249584621}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.38, y: 0, z: 1.53}
+  m_LocalPosition: {x: -0.38, y: 0, z: 7.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28924,7 +28924,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -29141,7 +29141,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -40198,7 +40198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
       propertyPath: _ballSpeed
-      value: 59.25
+      value: 60.39
       objectReference: {fileID: 0}
     - target: {fileID: 1691417852, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
       propertyPath: _basketPos
@@ -40243,6 +40243,10 @@ PrefabInstance:
     - target: {fileID: 1691417853, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
       propertyPath: m_Constraints
       value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691417853, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1691417854, guid: 64cdcafb22ba07d4c8be8190651ac3e7, type: 3}
       propertyPath: m_Height
@@ -46200,7 +46204,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _ballSpeed: 0
+  _ballSpeed: 60.39
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46210,6 +46214,7 @@ MonoBehaviour:
   forwOrBack: 0
   example: 0
   isTouchingBasket: 0
+  _canPass: 0
 --- !u!54 &8192271363361096609
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -46222,7 +46227,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -46272,7 +46277,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _ballSpeed: 0
+  _ballSpeed: 60.39
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46282,6 +46287,7 @@ MonoBehaviour:
   forwOrBack: 0
   example: 0
   isTouchingBasket: 0
+  _canPass: 0
 --- !u!33 &8431529553971715811
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -46391,7 +46397,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -46427,7 +46433,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _ballSpeed: 0
+  _ballSpeed: 60.39
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46437,6 +46443,7 @@ MonoBehaviour:
   forwOrBack: 0
   example: 0
   isTouchingBasket: 0
+  _canPass: 0
 --- !u!95 &8668584960824660198
 Animator:
   serializedVersion: 4
@@ -46506,7 +46513,7 @@ MonoBehaviour:
   _playerAnimator: {fileID: 1565076314}
   _movementSpeed: 3.96
   _rotationSpeed: 0.08
-  _ballSpeed: 0
+  _ballSpeed: 60.39
   whichPlayer: 0
   whichBasket: 0
   _basketPos: {fileID: 0}
@@ -46516,3 +46523,4 @@ MonoBehaviour:
   forwOrBack: 0
   example: 0
   isTouchingBasket: 0
+  _canPass: 0
