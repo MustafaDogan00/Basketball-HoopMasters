@@ -26,16 +26,13 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public GameObject _basketPos, _leftBasketPos, _rightBasketPos;
 
-    private Transform _chest;
+   [SerializeField] private Transform _chest;
 
     public bool isBallOnHand;
     public bool forwOrBack;
     public bool example;
     public bool isTouchingBasket;
     [SerializeField] private bool _canPass;
-
-    private Quaternion _q;
-    private Vector3 _v;
 
     List<Vector3> directions=new List<Vector3>();
    
@@ -45,7 +42,6 @@ public class PlayerController : MonoBehaviour
         _joyStick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<DynamicJoystick>();
         _playerAnimator = transform.GetChild(0).GetComponent<Animator>();       
         _ball = GameObject.FindGameObjectWithTag("Basketball");
-        _chest = gameObject.transform.GetChild(1).transform;
         _ballRb = _ball.GetComponent<Rigidbody>();
         _basketPos = GameObject.FindGameObjectWithTag("BasketPos");
         _leftBasketPos = GameObject.FindGameObjectWithTag("LeftColliderBasket");
@@ -67,10 +63,6 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, _rotationSpeed);
             }
             transform.position += direction * _movementSpeed * Time.deltaTime;
-            if (direction.magnitude >=.7f)
-            {
-                _canPass = false;
-            }
         }
         else
         {
@@ -78,69 +70,25 @@ public class PlayerController : MonoBehaviour
         }
 
         
-        BallDistance();
         Raycasting();
-        WhichPlayer();
-        if (!_joyStick.move && !_canPass && isBallOnHand)
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _canPass = true;
+        }
+
+        if (!_joyStick.move && _canPass && isBallOnHand && !isTouchingBasket)
         {
             PassBall();
         }
-       
     }
-
-    void BallDistance()
-    {
-        float distance = Vector3.Distance(gameObject.transform.position, _ball.transform.position);
-        if (distance <= 2f)
-        {
-            if (!example)
-            {
-                _ball.transform.position = _chest.transform.position;
-            }
-            isBallOnHand = true;
-            gameObject.tag = "MainPlayer";
-        }
-        else
-        {
-            isBallOnHand = false;
-            example = false;
-        }
-    }
-    void WhichPlayer()
-    {
-
-        if (isBallOnHand)
-        {
-            switch (gameObject.name)
-            {
-                case "PlayerHolder":
-                    whichPlayer = 0;
-                    break;
-                case "AI1":
-                    whichPlayer = 1;
-                    break;
-                case "AI2":
-                    whichPlayer = 2;
-                    break;
-                case "AI3":
-                    whichPlayer = 3;
-                    break;
-                case "AI4":
-                    whichPlayer = 4;
-                    break;
-            }
-        }
-        else
-        {
-            whichPlayer = 5;
-        }
-    }
+   
     void Raycasting()
     {      
         RaycastHit hit;
         RaycastHit hit1;
 
-        Debug.DrawLine(_chest.transform.position - new Vector3(0, .3f, 0), transform.forward * 5000, Color.red);
+        Debug.DrawLine(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward * 5000, Color.red);
 
         if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit, Mathf.Infinity))
         {
@@ -153,82 +101,74 @@ public class PlayerController : MonoBehaviour
                 forwOrBack = true;
             }
         }
-
         if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit1, Mathf.Infinity))
 
-            if (hit1.collider!=null)
+            if (hit1.collider != null && transform.position.z >= 0)
             {
-                if (hit1.collider.tag == "LeftCollider" && !_joyStick.move)
+                if (hit1.collider.tag == "LeftCollider")
                 {
-
-                    if (transform.position.z >= 0 && isBallOnHand)
-                    {
-                        whichBasket = 0;
-                        isTouchingBasket = true;
-                    }
-                    else
-                    {
-                        isTouchingBasket = false;
-                    }
-
+                    whichBasket = 0;
+                    isTouchingBasket = true;
+                }               
+               else if (hit1.collider.tag == "MiddleCollider")
+                {
+                    whichBasket = 1;
+                    isTouchingBasket = true;
+                    print("middle");
                 }
-                if (hit1.collider.tag == "MiddleCollider" && !_joyStick.move)
+               
+               else if (hit1.collider.tag == "RightCollider")
                 {
-                    if (transform.position.z >= 0 && isBallOnHand)
-                    {
-                        whichBasket = 1;
-                        isTouchingBasket = true;
-                    }
-                    else
-                    {
-                        isTouchingBasket = false;
-                    }
-
+                    whichBasket = 2;
+                    isTouchingBasket = true;
                 }
-                if (hit1.collider.tag == "RightCollider" && !_joyStick.move)
+                else
                 {
-                    if (transform.position.z >= 0 && isBallOnHand)
-                    {
-                        whichBasket = 2;
-                        isTouchingBasket = true;
-                    }
-                    else
-                    {
-                        isTouchingBasket = false;
-                    }
-                }              
+                    isTouchingBasket = false;
+                }
             }
     }
     void PassBall()
     {
-            isBallOnHand = false;
-            _canPass = true;
-            _ball.transform.DOMove(FindClosestPlayer().GetChild(1).position, .5f);          
-            _ball.gameObject.transform.SetParent(null);
-            _ball.gameObject.transform.SetParent(FindClosestPlayer());
-            FindClosestPlayer().GetComponent<PlayerController>().enabled = true;
-            FindClosestPlayer().GetComponent<AIController>().enabled = false;
-            gameObject.tag = "Player";
-            GetComponent<AIController>().enabled = true;          
-            this.enabled = false;                      
+        _ball.gameObject.transform.SetParent(null);
+        _ball.transform.DOMove(FindClosestPlayer().GetChild(1).position, .2f);
+        FindClosestPlayer().GetComponent<PlayerController>().enabled = true;
+        FindClosestPlayer().GetComponent<AIController>().enabled = false;
+        gameObject.tag = "Player";
+        GetComponent<AIController>().enabled = true;
+        _canPass = false;
+        isBallOnHand = false;
+        this.enabled = false;
     }
     Transform FindClosestPlayer()
     {
-        float closestAngle=Mathf.Infinity;
+        float closestAngle = Mathf.Infinity;
         float currentAngle;
-        Transform closestPlayer=null;
+        Transform closestPlayer = null;
 
         foreach (var item in GameObject.FindGameObjectsWithTag("Player"))
         {
-          currentAngle=Mathf.Abs(Vector3.Angle(transform.forward,item.transform.position-transform.position));
-            if (currentAngle<closestAngle)
+            currentAngle = Mathf.Abs(Vector3.Angle(transform.forward, item.transform.position - transform.position));
+            if (currentAngle < closestAngle)
             {
-                closestAngle=currentAngle;
+                closestAngle = currentAngle;
                 closestPlayer = item.transform;
             }
         }
-        return closestPlayer;     
+        return closestPlayer;
     }
 
-   
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag=="Basketball" && !example)
+        {
+            isBallOnHand = true;
+            gameObject.tag = "MainPlayer";
+            _ball.transform.position = _chest.position;     
+            _ball.transform.SetParent(gameObject.transform);
+            _ballRb.isKinematic=true;
+            _ballRb.useGravity=false;
+        }
+    }
+
 }

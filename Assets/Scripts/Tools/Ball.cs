@@ -30,16 +30,21 @@ public class Ball : MonoBehaviour
     {
         if (!_joyStick.move && PlayerController.Instance.isBallOnHand && PlayerController.Instance.isTouchingBasket)
         {
-            Shoot();
+           StartCoroutine(Shoot());
         }
     }
 
-    void Shoot()
+    IEnumerator Shoot()
     {
-        Physics.gravity = Vector3.up * _g;
         PlayerController.Instance.example = true;
+        PlayerController.Instance.isBallOnHand = false;
         gameObject.transform.SetParent(null);
+        _rb.isKinematic = false;
+        _rb.useGravity = true;
+        Physics.gravity = Vector3.up * _g;
         _rb.velocity = CalculateVelocity();
+        yield return new WaitForSeconds(.5f);
+        PlayerController.Instance.example = false;
     }
     Vector3 CalculateVelocity()
     {
