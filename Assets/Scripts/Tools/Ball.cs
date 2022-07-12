@@ -5,57 +5,33 @@ using DG.Tweening;
 
 public class Ball : MonoBehaviour
 {
-    public static Ball Instance;
+    private GameObject _player;
 
-    [SerializeField] private Transform[] _basketPos;
+    public float _speed;
 
-    private float _distanceY;
-    private float _g = -18f;
-    [SerializeField] private float _h = 5f;
+    public Transform target;
 
-    private Vector3 _velocityY, _velocityXZ, _distanceXZ;
+    public bool go;
 
-    private Rigidbody _rb;
+    public SphereCollider ballCollider;
 
-    private DynamicJoystick _joyStick;
-
-    private void Awake()
+    private void Start()
     {
-        Instance = this;
-        _rb = GetComponent<Rigidbody>();
-        _joyStick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<DynamicJoystick>();
+        ballCollider=GetComponent<SphereCollider>();
     }
-
     private void Update()
     {
-        if (!_joyStick.move && PlayerController.Instance.isBallOnHand && PlayerController.Instance.isTouchingBasket)
-        {
-           StartCoroutine(Shoot());
+        if (go)
+        {            
+            Vector3 direction = target.transform.position - transform.position;
+            transform.position += direction.normalized * _speed * Time.deltaTime;            
         }
-    }
-
-    IEnumerator Shoot()
+    }   
+    public void WhereToGo(Transform targetT)
     {
-        PlayerController.Instance.example = true;
-        PlayerController.Instance.isBallOnHand = false;
-        gameObject.transform.SetParent(null);
-        _rb.isKinematic = false;
-        _rb.useGravity = true;
-        Physics.gravity = Vector3.up * _g;
-        _rb.velocity = CalculateVelocity();
-        yield return new WaitForSeconds(.5f);
-        PlayerController.Instance.example = false;
+        target=targetT;
+        go=true;
     }
-    Vector3 CalculateVelocity()
-    {
-        _distanceY = _basketPos[PlayerController.Instance.whichBasket].transform.position.y - transform.position.y;
-        _distanceXZ = new Vector3(_basketPos[PlayerController.Instance.whichBasket].transform.position.x - transform.position.x, 0, _basketPos[PlayerController.Instance.whichBasket].transform.position.z - transform.position.z);
-
-        _velocityY = Vector3.up * Mathf.Sqrt(-2 * _g * _h);
-        _velocityXZ = _distanceXZ / (Mathf.Sqrt(-2 * _h / _g) + Mathf.Sqrt(2 * (_distanceY - _h) / _g));
-        return _velocityY + _velocityXZ;
-    }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -64,7 +40,7 @@ public class Ball : MonoBehaviour
            GetComponent<AudioSource>().Play();
         }
     }
-
+    
   
 
 }
