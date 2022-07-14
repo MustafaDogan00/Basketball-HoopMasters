@@ -25,8 +25,6 @@ public class AIController : MonoBehaviour
 
     void Update()
     {
-        print(mainPlayer.name);
-
         if (mainPlayer.transform.position.z <= -12)
         {
             _posNumber = 0;

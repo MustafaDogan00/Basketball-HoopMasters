@@ -26,6 +26,8 @@ TagManager:
   - Swish
   - Enemy
   - EnemyWithTheBall
+  - Ground
+  - BasketballChild
   layers:
   - Default
   - TransparentFX

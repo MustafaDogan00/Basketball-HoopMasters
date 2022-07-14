@@ -15,6 +15,9 @@ public class Ball : MonoBehaviour
 
     public SphereCollider ballCollider;
 
+    public bool isBallOnGround;
+    public bool defense;
+
     private void Start()
     {
         ballCollider=GetComponent<SphereCollider>();
@@ -25,7 +28,7 @@ public class Ball : MonoBehaviour
         {            
             Vector3 direction = target.transform.position - transform.position;
             transform.position += direction.normalized * _speed * Time.deltaTime;            
-        }
+        } 
     }   
     public void WhereToGo(Transform targetT)
     {
@@ -38,6 +41,23 @@ public class Ball : MonoBehaviour
         if (other.gameObject.tag=="Swish")
         {
            GetComponent<AudioSource>().Play();
+        }
+
+        if (other.gameObject.tag == "Ground")
+        {
+            isBallOnGround = true;
+        }
+        else
+            isBallOnGround = false;
+
+
+        if (other.gameObject.tag=="Player" || other.gameObject.tag=="Player" || other.gameObject.tag=="Ground")
+        {
+            defense=true;
+        }
+        else
+        {
+            defense = false;
         }
     }
     

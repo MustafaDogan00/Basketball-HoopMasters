@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Ball _ballS;
 
-    public Collider collider;
+    public Collider coll;
 
     private void Awake()
     {        
@@ -146,10 +146,11 @@ public class PlayerController : MonoBehaviour
     {
         _ball.gameObject.transform.SetParent(null);
         _ballS.WhereToGo(FindClosestPlayer().GetChild(1));
+       // _ball.gameObject.tag = "BasketballChild";
         FindClosestPlayer().GetComponent<PlayerController>().enabled = true;
        FindClosestPlayer().GetComponent<AIController>().enabled = false;
-        FindClosestPlayer().GetComponent<PlayerController>().collider.enabled = true;
-        collider.enabled=false;
+        FindClosestPlayer().GetComponent<PlayerController>().coll.enabled = true;
+        coll.enabled=false;
         gameObject.tag = "Player";
      
        GetComponent<AIController>().enabled = true;
@@ -181,6 +182,7 @@ public class PlayerController : MonoBehaviour
         {
             isBallOnHand = true;
             gameObject.tag = "MainPlayer";
+           // _ball.gameObject.tag = "Basketball";
             _ball = GameObject.FindGameObjectWithTag("Basketball");
             _ball.transform.position = _chest.position;
             _ballS.go = false;

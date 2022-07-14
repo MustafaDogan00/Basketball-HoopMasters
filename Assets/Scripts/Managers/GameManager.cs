@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject[] _players;
 
-    [SerializeField] List<AIController> _controllers;
+    [SerializeField] List<AIController> _ai;
+
     private void Awake()
     {
        Instance = this;
@@ -17,10 +18,11 @@ public class GameManager : MonoBehaviour
 
     public void MainPlayer(Transform targetPlayer)
     {     
-        foreach (var item in _controllers)
+        foreach (var item in _ai)
         {
             item.mainPlayer = targetPlayer;
         }
     }
+  
 
 }
