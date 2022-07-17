@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool _canPass;
     public bool mainPlayerCheck=true;
 
+    [SerializeField] private CourtAreas courtAreas;
+
     List<Vector3> directions=new List<Vector3>();
 
     private Vector3 _velocityY, _velocityXZ, _distanceXZ;
@@ -175,7 +177,34 @@ public class PlayerController : MonoBehaviour
         }
         return closestPlayer;
     }
-
+    private void OnTriggerStay(Collider other)
+    {
+        if (gameObject.CompareTag("MainPlayer"))
+        {
+            switch (other.tag)
+            {
+                case "Defense1":
+                    courtAreas.PlayerState = CourtAreas.PlayerStateOnCourt.DEFENSE1;
+                    break;
+                case "Defense2":
+                    courtAreas.PlayerState = CourtAreas.PlayerStateOnCourt.DEFENSE2;
+                    break;
+                case "Mid1":
+                    courtAreas.PlayerState = CourtAreas.PlayerStateOnCourt.MID1;
+                    break;
+                case "Mid2":
+                    courtAreas.PlayerState = CourtAreas.PlayerStateOnCourt.MID2;
+                    break;
+                case "Front1":
+                    courtAreas.PlayerState = CourtAreas.PlayerStateOnCourt.FRONT1;
+                    break;
+                case "Front2":
+                    courtAreas.PlayerState = CourtAreas.PlayerStateOnCourt.FRONT2;
+                    break;
+            }
+        }
+        
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag=="Basketball" && !example )
@@ -191,6 +220,7 @@ public class PlayerController : MonoBehaviour
             _ball.GetComponent<Rigidbody>().useGravity=false;           
         }
     }
+    
     IEnumerator ShootBall()
     {
         example = true;

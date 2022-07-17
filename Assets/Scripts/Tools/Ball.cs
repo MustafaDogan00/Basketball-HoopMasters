@@ -51,7 +51,7 @@ public class Ball : MonoBehaviour
             isBallOnGround = false;
 
 
-        if (other.gameObject.tag=="Player" || other.gameObject.tag=="Player" || other.gameObject.tag=="Ground")
+        if (other.gameObject.tag=="Player" || other.gameObject.tag=="Ground")
         {
             defense=true;
         }
