@@ -3247,7 +3247,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -3898,7 +3903,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -6703,7 +6713,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 96.3303
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -6728,14 +6738,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.27509108, y: -0, z: -0, w: 0.96141815}
-  m_LocalPosition: {x: -0.3, y: 11.14, z: -3.6}
+  m_LocalRotation: {x: 0.44645616, y: -0, z: -0, w: 0.8948055}
+  m_LocalPosition: {x: -0.06, y: 13.39, z: -2.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1818361402}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 31.935, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 53.033, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6781,9 +6791,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 915ceef5d64c14746890cc7a1a206c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1521657415982499890}
+  whichPlayer: 0
+  target:
+  - {fileID: 1521657415982499890}
+  - {fileID: 4187743914921165128}
+  - {fileID: 4328286742949633742}
+  - {fileID: 9154024849056811802}
+  - {fileID: 7877643798790462713}
   smoothSpeed: 0.125
-  offset: {x: 0.8, y: 19.12, z: -17}
+  offset: {x: 0, y: 12.43, z: -6}
   follow: 1
 --- !u!1 &330836260
 GameObject:
@@ -14598,7 +14614,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -18606,7 +18627,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -18969,7 +18995,12 @@ MonoBehaviour:
   - {fileID: 7472112605006588562}
   - {fileID: 2642150728000880454}
   - {fileID: 3958783108104300709}
-  _ai: []
+  _ai:
+  - {fileID: 1577647580}
+  - {fileID: 8192271363361096611}
+  - {fileID: 8627832962112281640}
+  - {fileID: 9154024849056811803}
+  - {fileID: 7877643798790462714}
 --- !u!1 &924751707
 GameObject:
   m_ObjectHideFlags: 0
@@ -27053,7 +27084,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -34124,7 +34160,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh32144
+  m_Name: pb_Mesh32084
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -37667,7 +37703,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -46078,7 +46119,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -46098,7 +46144,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -59490,7 +59541,7 @@ SphereCollider:
   m_GameObject: {fileID: 6498598532884681258}
   m_Material: {fileID: 13400000, guid: 6756dd21c5ec81a4ea0422dae379928e, type: 2}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.50772727
   m_Center: {x: 5.3536782e-30, y: -0.00000017881393, z: 0.000000029802322}
@@ -60348,9 +60399,10 @@ MonoBehaviour:
   _canPass: 0
   mainPlayerCheck: 1
   courtAreas: {fileID: 1753122071}
-  myEase: 2
+  _cameraFollow: {fileID: 330585548}
   _ballS: {fileID: 6498598532884681259}
   coll: {fileID: 1577647584}
+  ballCollider: {fileID: 6498598532884681263}
 --- !u!54 &6823818588896987867
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -66178,7 +66230,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -66438,9 +66495,10 @@ MonoBehaviour:
   _canPass: 0
   mainPlayerCheck: 1
   courtAreas: {fileID: 1753122071}
-  myEase: 0
+  _cameraFollow: {fileID: 330585548}
   _ballS: {fileID: 6498598532884681259}
   coll: {fileID: 7877643798790462716}
+  ballCollider: {fileID: 6498598532884681263}
 --- !u!136 &7877643798790462716
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66545,9 +66603,10 @@ MonoBehaviour:
   _canPass: 0
   mainPlayerCheck: 1
   courtAreas: {fileID: 1753122071}
-  myEase: 0
+  _cameraFollow: {fileID: 330585548}
   _ballS: {fileID: 6498598532884681259}
   coll: {fileID: 8192271363361096613}
+  ballCollider: {fileID: 6498598532884681263}
 --- !u!136 &8192271363361096613
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66735,9 +66794,10 @@ MonoBehaviour:
   _canPass: 0
   mainPlayerCheck: 1
   courtAreas: {fileID: 1753122071}
-  myEase: 0
+  _cameraFollow: {fileID: 330585548}
   _ballS: {fileID: 6498598532884681259}
   coll: {fileID: 8627832962112281642}
+  ballCollider: {fileID: 6498598532884681263}
 --- !u!136 &8627832962112281642
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66768,7 +66828,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine1_M'\n\tTransform 'Ankle_L'\n\tTransform
+    'Hip_L'\n\tTransform 'Head_M'\n\tTransform 'Ankle_R'\n\tTransform 'Wrist_L'\n\tTransform
+    'Knee_R'\n\tTransform 'Spine1_M'\n\tTransform 'Shoulder_L'\n\tTransform 'Wrist_R'\n\tand
+    more ...\n\tFrom animation clip 'Shoot (1)'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -66849,9 +66914,10 @@ MonoBehaviour:
   _canPass: 0
   mainPlayerCheck: 1
   courtAreas: {fileID: 1753122071}
-  myEase: 0
+  _cameraFollow: {fileID: 330585548}
   _ballS: {fileID: 6498598532884681259}
   coll: {fileID: 9154024849056811805}
+  ballCollider: {fileID: 6498598532884681263}
 --- !u!136 &9154024849056811805
 CapsuleCollider:
   m_ObjectHideFlags: 0

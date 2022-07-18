@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     {     
         foreach (var item in _ai)
         {
-            item.mainPlayer = targetPlayer;
+            item.mainPlayer=targetPlayer ;
         }
     }
   

@@ -40,15 +40,17 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private CourtAreas courtAreas;
 
+    [SerializeField] private CameraFollow _cameraFollow;
+
     List<Vector3> directions=new List<Vector3>();
 
     private Vector3 _velocityY, _velocityXZ, _distanceXZ;
 
-   public Ease myEase;
-
     [SerializeField] private Ball _ballS;
 
     public Collider coll;
+
+    public Collider ballCollider;
 
     private void Awake()
     {        
@@ -82,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
         
         Raycasting();
+        CamFollow();
         
         if (Input.GetMouseButtonUp(0))
         {
@@ -91,7 +94,7 @@ public class PlayerController : MonoBehaviour
         if (!_joyStick.move && _canPass && isBallOnHand && !isTouchingBasket)
         {
             GameManager.Instance.MainPlayer(FindClosestPlayer());
-            PassBall();
+            StartCoroutine(PassBall());
             
         }
         if (!_joyStick.move && isBallOnHand && _canPass && isTouchingBasket)
@@ -144,21 +147,23 @@ public class PlayerController : MonoBehaviour
                 }
             }
     }
-    void PassBall()
+    IEnumerator PassBall()
     {
+        _playerAnimator.SetBool("Pass",true);
         _ball.gameObject.transform.SetParent(null);
         _ballS.WhereToGo(FindClosestPlayer().GetChild(1));
-       // _ball.gameObject.tag = "BasketballChild";
         FindClosestPlayer().GetComponent<PlayerController>().enabled = true;
        FindClosestPlayer().GetComponent<AIController>().enabled = false;
         FindClosestPlayer().GetComponent<PlayerController>().coll.enabled = true;
+        ballCollider.enabled = false;
         coll.enabled=false;
         gameObject.tag = "Player";
-     
-       GetComponent<AIController>().enabled = true;
+        GetComponent<AIController>().enabled = true;
         _canPass = false;
         isBallOnHand = false;
         this.enabled = false;
+        yield return new WaitForSeconds(.5f);
+        _playerAnimator.SetBool("Pass", false);
     }
     Transform FindClosestPlayer()
     {
@@ -211,10 +216,10 @@ public class PlayerController : MonoBehaviour
         {
             isBallOnHand = true;
             gameObject.tag = "MainPlayer";
-           // _ball.gameObject.tag = "Basketball";
             _ball = GameObject.FindGameObjectWithTag("Basketball");
             _ball.transform.position = _chest.position;
             _ballS.go = false;
+            ballCollider.enabled = true;
             _ball.transform.SetParent(gameObject.transform);
             _ball.GetComponent<Rigidbody>().isKinematic=true;
             _ball.GetComponent<Rigidbody>().useGravity=false;           
@@ -223,14 +228,17 @@ public class PlayerController : MonoBehaviour
     
     IEnumerator ShootBall()
     {
+        _playerAnimator.SetBool("Shoot",true);
         example = true;
         isBallOnHand = false;
         _ball.transform.SetParent(null);
         _ballRb.isKinematic = false;
         _ballRb.useGravity = true;
+        ballCollider.enabled = false;
         Physics.gravity = Vector3.up * _g;
         _ballRb.velocity = CalculateBallVelocity();
         yield return new WaitForSeconds(.5f);
+        _playerAnimator.SetBool("Shoot",false);
         example = false;
     }
     Vector3 CalculateBallVelocity()
@@ -271,4 +279,29 @@ public class PlayerController : MonoBehaviour
     //    else
     //        return null;
     //}
+
+
+    public void CamFollow()
+    {
+        switch (gameObject.name)
+        {
+            case "PlayerHolder":
+                _cameraFollow.whichPlayer = CameraFollow.WhichPlayer.PLAYERHOLDER;
+                break;
+            case "AI1":
+                _cameraFollow.whichPlayer = CameraFollow.WhichPlayer.AI1;
+                break;
+            case "AI2":
+                _cameraFollow.whichPlayer = CameraFollow.WhichPlayer.AI2;
+                break;
+            case "AI3":
+                _cameraFollow.whichPlayer = CameraFollow.WhichPlayer.AI3;
+                break;
+            case "AI4":
+                _cameraFollow.whichPlayer = CameraFollow.WhichPlayer.AI4;
+                break;
+        }
+    }
+
+
 }
