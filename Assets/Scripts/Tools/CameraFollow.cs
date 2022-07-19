@@ -40,24 +40,29 @@ public class CameraFollow : MonoBehaviour
         }
 	}
 
-   void PlayerChange()
+   IEnumerator PlayerChange()
     {
         switch(whichPlayer)
         {
 
             case WhichPlayer.PLAYERHOLDER:
+                yield return new WaitForSeconds(smoothSpeed);
                 playerNum=0;
                 break;
             case WhichPlayer.AI1:
+                yield return new WaitForSeconds(smoothSpeed);
                 playerNum = 1;
                 break;
             case WhichPlayer.AI2:
+                yield return new WaitForSeconds(smoothSpeed);
                 playerNum = 2;
                 break;
             case WhichPlayer.AI3:
+                yield return new WaitForSeconds(smoothSpeed);
                 playerNum = 3;
                 break;
             case WhichPlayer.AI4:
+                yield return new WaitForSeconds(smoothSpeed);
                 playerNum = 4;
                 break;
         }

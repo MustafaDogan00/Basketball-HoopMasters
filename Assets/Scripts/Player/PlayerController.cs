@@ -52,6 +52,10 @@ public class PlayerController : MonoBehaviour
 
     public Collider ballCollider;
 
+    [SerializeField] private Avatar _avatar;
+
+    [SerializeField] private AnimEvent _animationEvent;
+
     private void Awake()
     {        
         Instance = this;
@@ -94,12 +98,23 @@ public class PlayerController : MonoBehaviour
         if (!_joyStick.move && _canPass && isBallOnHand && !isTouchingBasket)
         {
             GameManager.Instance.MainPlayer(FindClosestPlayer());
-            StartCoroutine(PassBall());
-            
+            _playerAnimator.avatar = null;
+            _playerAnimator.SetBool("Pass", true);            
+            if(_animationEvent.passBall)
+            {
+                StartCoroutine(PassBall()); 
+            }
+
         }
         if (!_joyStick.move && isBallOnHand && _canPass && isTouchingBasket)
         {
-            StartCoroutine(ShootBall());
+            _playerAnimator.avatar = null;
+            _playerAnimator.SetBool("Shoot", true);
+            if (_animationEvent.shootBall)
+            {
+                StartCoroutine(ShootBall());
+            }
+           
         }
     }
    
@@ -147,13 +162,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
     }
-    IEnumerator PassBall()
-    {
-        _playerAnimator.SetBool("Pass",true);
+   public IEnumerator PassBall()
+    {      
         _ball.gameObject.transform.SetParent(null);
         _ballS.WhereToGo(FindClosestPlayer().GetChild(1));
         FindClosestPlayer().GetComponent<PlayerController>().enabled = true;
-       FindClosestPlayer().GetComponent<AIController>().enabled = false;
+        FindClosestPlayer().GetComponent<AIController>().enabled = false;
         FindClosestPlayer().GetComponent<PlayerController>().coll.enabled = true;
         ballCollider.enabled = false;
         coll.enabled=false;
@@ -162,7 +176,8 @@ public class PlayerController : MonoBehaviour
         _canPass = false;
         isBallOnHand = false;
         this.enabled = false;
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.2f);
+        _playerAnimator.avatar = _avatar;
         _playerAnimator.SetBool("Pass", false);
     }
     Transform FindClosestPlayer()
@@ -226,9 +241,8 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    IEnumerator ShootBall()
-    {
-        _playerAnimator.SetBool("Shoot",true);
+    public IEnumerator ShootBall()
+    {     
         example = true;
         isBallOnHand = false;
         _ball.transform.SetParent(null);
@@ -239,6 +253,7 @@ public class PlayerController : MonoBehaviour
         _ballRb.velocity = CalculateBallVelocity();
         yield return new WaitForSeconds(.5f);
         _playerAnimator.SetBool("Shoot",false);
+        _playerAnimator.avatar=_avatar;
         example = false;
     }
     Vector3 CalculateBallVelocity()
