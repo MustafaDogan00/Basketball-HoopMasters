@@ -110,10 +110,7 @@ public class PlayerController : MonoBehaviour
         {
             _playerAnimator.avatar = null;
             _playerAnimator.SetBool("Shoot", true);
-            if (_animationEvent.shootBall)
-            {
-                StartCoroutine(ShootBall());
-            }
+            StartCoroutine(ShootBall());         
            
         }
     }

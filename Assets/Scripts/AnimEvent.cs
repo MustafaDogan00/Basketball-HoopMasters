@@ -12,10 +12,9 @@ public class AnimEvent : MonoBehaviour
     public void PassEvent()
     {
         passBall = true;
-    }
-
+    }   
     public void ShootEvent()
     {
         shootBall = true;      
-    }
+    }   
 }
