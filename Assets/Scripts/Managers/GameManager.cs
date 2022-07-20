@@ -14,19 +14,29 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] List<AIController> _ai;
 
-    [SerializeField] private TextMeshPro _teamScore;
-    [SerializeField] private TextMeshPro _enemyTeamScore;
+    [SerializeField] private TextMeshProUGUI _teamScore;
+    [SerializeField] private TextMeshProUGUI _enemyTeamScore;
+    [SerializeField] private TextMeshProUGUI _timer;
 
 
     [SerializeField] private Image _fill;
     [SerializeField] private Image _image;
 
+    private float _time = 25;    
+
+
+
     private void Awake()
     {
        Instance = this;
+        _timer.text = _time.ToString("F2");
     }
 
-
+    private void Update()
+    {
+        _teamScore.text = Ball.Instance.teamScore.ToString();
+        Timer();
+    }
     public void MainPlayer(Transform targetPlayer)
     {     
         foreach (var item in _ai)
@@ -49,8 +59,12 @@ public class GameManager : MonoBehaviour
             yield return null;  
         }
         if(async.isDone)
-            _image.enabled = false;
-       
+            _image.enabled = false;      
     }
 
+    void Timer()
+    {
+        _time -= Time.deltaTime;
+        _timer.text = _time.ToString("F2");
+    }
 }

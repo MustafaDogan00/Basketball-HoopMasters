@@ -28,15 +28,17 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public GameObject _leftBasketPos, _rightBasketPos;
 
-   [SerializeField] private Transform _chest;
+    [SerializeField] private Transform _chest;
     [SerializeField] private Transform[] _basketPos;
 
     public bool isBallOnHand;
     public bool forwOrBack;
     public bool example;
     public bool isTouchingBasket;
+    public bool mainPlayerCheck = true;
+    public bool twoPoints;
     [SerializeField] private bool _canPass;
-    public bool mainPlayerCheck=true;
+   
 
     [SerializeField] private CourtAreas courtAreas;
 
@@ -49,12 +51,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Ball _ballS;
 
     public Collider coll;
-
     public Collider ballCollider;
 
     [SerializeField] private Avatar _avatar;
 
     [SerializeField] private AnimEvent _animationEvent;
+
+    [SerializeField] private LayerMask _layerMask;
 
     private void Awake()
     {        
@@ -100,10 +103,10 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.MainPlayer(FindClosestPlayer());
             _playerAnimator.avatar = null;
             _playerAnimator.SetBool("Pass", true);            
-            if(_animationEvent.passBall)
-            {
+           // if(_animationEvent.passBall)
+            //{
                 StartCoroutine(PassBall()); 
-            }
+            //}
 
         }
         if (!_joyStick.move && isBallOnHand && _canPass && isTouchingBasket)
@@ -133,7 +136,7 @@ public class PlayerController : MonoBehaviour
                 forwOrBack = true;
             }
         }
-        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit1, Mathf.Infinity))
+        if (Physics.Raycast(_chest.transform.position - new Vector3(0, .5f, 0), transform.forward, out hit1, Mathf.Infinity,_layerMask))
 
             if (hit1.collider != null && transform.position.z >= 0)
             {
@@ -220,7 +223,16 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-        
+
+
+        if (other.tag=="ThreePoints")
+        {
+            twoPoints = true;
+        }
+        else
+        {
+            twoPoints = false;
+        }
     }
     private void OnTriggerEnter(Collider other)
     {

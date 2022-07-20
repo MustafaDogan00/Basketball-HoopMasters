@@ -34,11 +34,12 @@ TagManager:
   - Mid2
   - Front1
   - Front2
+  - ThreePoints
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - ThreePoints
   - Water
   - UI
   - 
