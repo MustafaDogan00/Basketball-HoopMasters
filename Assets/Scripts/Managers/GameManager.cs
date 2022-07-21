@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private GameObject[] _players;
+    [SerializeField] private GameObject _loadScreen;
+    [SerializeField] private GameObject _inGamePanel;
 
     [SerializeField] List<AIController> _ai;
 
@@ -20,8 +22,9 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] private Image _fill;
-    [SerializeField] private Image _image;
 
+
+    private bool load;
     private float _time = 25;    
 
 
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
     {
        Instance = this;
         _timer.text = _time.ToString("F2");
+       // Load(0);
     }
 
     private void Update()
@@ -48,7 +52,7 @@ public class GameManager : MonoBehaviour
     public void Load(int level)
     {
         StartCoroutine(StartLoading(level));    
-        _image.enabled = true;
+        _loadScreen.SetActive(true);
     }
     IEnumerator StartLoading(int level)
     {
@@ -59,12 +63,20 @@ public class GameManager : MonoBehaviour
             yield return null;  
         }
         if(async.isDone)
-            _image.enabled = false;      
+            _loadScreen.SetActive(false);
     }
 
     void Timer()
     {
         _time -= Time.deltaTime;
         _timer.text = _time.ToString("F2");
+    }
+
+
+    public void Loading()
+    {
+        _loadScreen.SetActive(false);
+        _inGamePanel.SetActive(true);
+       
     }
 }
